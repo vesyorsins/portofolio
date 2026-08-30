@@ -121,7 +121,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.45 }}
-            className="flex flex-wrap items-center gap-3 mb-10"
+            className="flex flex-wrap items-center gap-3 mb-8"
           >
             <button
               onClick={() => scrollTo("projects")}
@@ -165,40 +165,38 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             )}
           </motion.div>
 
-          {/* Social Links */}
+          {/* Responsive Social Links Pills (Mobile & Desktop Optimized) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="flex items-center gap-4 text-stone-500 text-xs font-mono"
+            className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs font-mono text-stone-600 w-full"
           >
-            <span className="text-stone-400">PROFILES:</span>
+            <span className="text-stone-400 font-semibold text-[11px] uppercase mr-1">PROFILES:</span>
+            
             <a
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 hover:text-black transition-colors"
-              data-cursor-interactive
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-white border border-stone-200/90 hover:border-stone-300 text-stone-800 hover:text-black transition-colors shadow-xs cursor-pointer"
             >
               <GithubIcon className="w-3.5 h-3.5" />
               <span>GitHub</span>
             </a>
-            <span className="text-stone-300">•</span>
+
             <a
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 hover:text-black transition-colors"
-              data-cursor-interactive
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-white border border-stone-200/90 hover:border-stone-300 text-stone-800 hover:text-black transition-colors shadow-xs cursor-pointer"
             >
               <LinkedinIcon className="w-3.5 h-3.5" />
               <span>LinkedIn</span>
             </a>
-            <span className="text-stone-300">•</span>
+
             <a
               href="mailto:hello@vesyorsins.dev"
-              className="flex items-center gap-1 hover:text-black transition-colors"
-              data-cursor-interactive
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-white border border-stone-200/90 hover:border-stone-300 text-stone-800 hover:text-black transition-colors shadow-xs cursor-pointer"
             >
               <Mail className="w-3.5 h-3.5" />
               <span>hello@vesyorsins.dev</span>
