@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Brain, Code2, Globe, Server } from "lucide-react";
+import { Brain, Code2, ShieldAlert, Server } from "lucide-react";
 
 interface SkillCategory {
   id: string;
@@ -15,45 +15,31 @@ interface SkillCategory {
 
 const skillCategories: SkillCategory[] = [
   {
-    id: "ai",
-    title: "AI Systems & Machine Learning",
-    icon: Brain,
-    tagline: "LLM Orchestration, Streaming RAG, and Vector Retrieval",
-    description: "Merancang pipeline inferensi AI berbasis agen, embedding semantik berkecepatan tinggi, dan integrasi multi-model dengan performa optimal.",
-    skills: [
-      { name: "LangChain / LangGraph", level: 94, category: "Agent Workflow", description: "Orkestrasikan subagent otonom & stateful graphs" },
-      { name: "Groq (LLaMA 3.1) & Gemini Flash", level: 96, category: "Model Serving", description: "Inferensi latency ultra-rendah & multimodal context" },
-      { name: "Pinecone / Milvus Vector DB", level: 90, category: "Semantic RAG", description: "Index HNSW & hybrid semantic dense/sparse retrieval" },
-      { name: "Python, PyTorch & Scikit-Learn", level: 88, category: "Core ML", description: "Fine-tuning, evaluasi model, dan data pipeline" },
-      { name: "Automated Evals & Guardrails", level: 92, category: "AI Safety", description: "Benchmarking akurasi dan mitigasi halusinasi model" },
-    ],
-  },
-  {
-    id: "webgl",
-    title: "Creative Web & 3D (WebGL)",
-    icon: Globe,
-    tagline: "GPU Shaders, 3D Kinematics, dan Micro-interactions",
-    description: "Membangun visual web interaktif berstandar tinggi menggunakan Three.js, GLSL shaders, dan kalkulasi fisika WebAssembly tanpa lag.",
-    skills: [
-      { name: "Three.js & React Three Fiber (R3F)", level: 92, category: "3D Core Engine", description: "Scene graph, PBR materials, custom geometry" },
-      { name: "Rapier Physics 3D (WASM)", level: 88, category: "Physics Kinematics", description: "Simulasi rigid-body, cloth, dan rope dynamics" },
-      { name: "GLSL Custom Shaders & Raymarching", level: 85, category: "GPU Shaders", description: "Volumetric lighting, refractive glass, noise warps" },
-      { name: "GSAP (ScrollTrigger) & Framer Motion", level: 98, category: "Timeline Motion", description: "Choreography timeline & spring kinematics" },
-      { name: "Lenis Momentum Smooth Scroll", level: 96, category: "Scroll Engine", description: "Inertia scrolling, zero layout shifts, smooth RAF" },
-    ],
-  },
-  {
     id: "fullstack",
-    title: "Full-Stack Architecture & TypeScript",
+    title: "Full-Stack Web & TypeScript Architecture",
     icon: Code2,
     tagline: "Scalable Distributed Web Applications & Server Components",
     description: "Membangun sistem web full-stack modern berbasis Next.js App Router, strict TypeScript type safety, dan performa Core Web Vitals 100/100.",
     skills: [
       { name: "Next.js 16 (App Router / RSC)", level: 98, category: "Full-Stack Framework", description: "Server components, streaming SSR, dynamic caching" },
       { name: "React 19 & TypeScript 5.8", level: 96, category: "Reactive Core", description: "Strict types, concurrent mode, custom hooks" },
-      { name: "Tailwind CSS v4 & Radix UI", level: 98, category: "Design System", description: "Design tokens, accessible primitives, cyber themes" },
+      { name: "Tailwind CSS v4 & Modern UI", level: 98, category: "Design System", description: "Design tokens, accessible primitives, cyber themes" },
       { name: "FastAPI / Node.js / Hono", level: 90, category: "API Services", description: "Asynchronous microservices, WebSocket streaming" },
       { name: "PostgreSQL, TimescaleDB & Prisma", level: 90, category: "Data Layer", description: "Time-series queries, ACID transactions, migrations" },
+    ],
+  },
+  {
+    id: "security",
+    title: "Security Engineering & Pentest",
+    icon: ShieldAlert,
+    tagline: "Offensive Security, Vulnerability Hunting, and App Hardening",
+    description: "Melakukan audit keamanan aplikasi web, penetration testing berstandar OWASP Top 10, fuzzing payload WAF, dan penguatan arsitektur zero-trust.",
+    skills: [
+      { name: "Burp Suite & OWASP ZAP", level: 94, category: "Web Security", description: "Vulnerability scanning, request fuzzing, payload injection" },
+      { name: "Nmap, Wireshark & Netcat", level: 92, category: "Network Recon", description: "Packet inspection, port scanning, and attack surface mapping" },
+      { name: "Binary Exploitation & Reverse Eng", level: 86, category: "Offensive Sec", description: "Buffer overflow analysis, shellcode, and binary disassembly" },
+      { name: "Zero-Trust & JWT Hardening", level: 95, category: "App Defense", description: "Strict CSP/CORS headers, cryptographic token rotation" },
+      { name: "Kali Linux & Metasploit", level: 90, category: "Red Teaming", description: "Penetration testing environments & automated defense testing" },
     ],
   },
   {
@@ -68,6 +54,20 @@ const skillCategories: SkillCategory[] = [
       { name: "GitHub Actions CI/CD Pipelines", level: 90, category: "Automation", description: "Automated linting, testing, and continuous deploy" },
       { name: "Redis Caching & Kafka Streams", level: 86, category: "Message Broker", description: "Pub/Sub message queues & distributed caching" },
       { name: "Linux Administration & Bash CLI", level: 94, category: "Operating Systems", description: "Shell scripting, daemon management, system tuning" },
+    ],
+  },
+  {
+    id: "ai",
+    title: "AI Systems & Machine Learning",
+    icon: Brain,
+    tagline: "LLM Orchestration, Streaming RAG, and Vector Retrieval",
+    description: "Merancang pipeline inferensi AI berbasis agen, embedding semantik berkecepatan tinggi, dan integrasi multi-model dengan performa optimal.",
+    skills: [
+      { name: "LangChain / LangGraph", level: 94, category: "Agent Workflow", description: "Orkestrasikan subagent otonom & stateful graphs" },
+      { name: "Groq (LLaMA 3.1) & Gemini Flash", level: 96, category: "Model Serving", description: "Inferensi latency ultra-rendah & multimodal context" },
+      { name: "Pinecone / Milvus Vector DB", level: 90, category: "Semantic RAG", description: "Index HNSW & hybrid semantic dense/sparse retrieval" },
+      { name: "Python, PyTorch & Scikit-Learn", level: 88, category: "Core ML", description: "Fine-tuning, evaluasi model, dan data pipeline" },
+      { name: "Automated Evals & Guardrails", level: 92, category: "AI Safety", description: "Benchmarking akurasi dan mitigasi halusinasi model" },
     ],
   },
 ];

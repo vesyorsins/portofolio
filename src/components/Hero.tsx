@@ -26,9 +26,10 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
   const cardScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 0.9]), springConfig);
 
   const roles = [
-    "Full-Stack Software Engineer",
-    "Creative Web & 3D Developer",
-    "Systems & Data Architect",
+    "Full-Stack Web Engineer",
+    "Security & Penetration Tester",
+    "DevOps & Cloud Architect",
+    "Applied AI & Systems Engineer",
   ];
 
   useEffect(() => {
@@ -124,12 +125,12 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             className="flex flex-wrap items-center gap-3 mb-8"
           >
             <button
-              onClick={() => scrollTo("disciplines")}
+              onClick={() => scrollTo("projects")}
               className="px-5 py-2.5 rounded-xl bg-[#1c1917] hover:bg-[#292524] text-white text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
               data-cursor-interactive
               data-cursor-text="VIEW"
             >
-              <span>Explore Four Disciplines</span>
+              <span>View Selected Works</span>
               <ArrowUpRight className="w-4 h-4" />
             </button>
 

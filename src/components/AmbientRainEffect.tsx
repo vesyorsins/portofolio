@@ -23,10 +23,10 @@ interface Ripple {
 
 export default function AmbientRainEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { scrollYProgress } = useScroll();
+  const { scrollY } = useScroll();
 
-  // The rain effect smoothly emerges ONLY when the user scrolls into the dark realm
-  const rainOpacity = useTransform(scrollYProgress, [0.32, 0.58], [0, 0.75]);
+  // The rain effect smoothly emerges ONLY when the user scrolls into the dark realm after certificates
+  const rainOpacity = useTransform(scrollY, [4000, 5600], [0, 0.75]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

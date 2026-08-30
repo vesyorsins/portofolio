@@ -17,10 +17,10 @@ interface FogParticle {
 
 export default function AmbientFogEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { scrollYProgress } = useScroll();
+  const { scrollY } = useScroll();
 
-  // Fog gently builds up and peaks at the bottom deep-dark realm (from 0.6 to 1.0)
-  const fogOpacity = useTransform(scrollYProgress, [0.55, 0.82, 1], [0, 0.7, 0.95]);
+  // Fog gently builds up and peaks at the bottom deep-dark realm based strictly on scroll distance
+  const fogOpacity = useTransform(scrollY, [6000, 8000], [0, 0.9]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

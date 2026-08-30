@@ -8,8 +8,8 @@ import StatsMarquee from "@/components/StatsMarquee";
 import ScrollVelocityMarquee from "@/components/ScrollVelocityMarquee";
 import ManifestoSection from "@/components/ManifestoSection";
 import ParallaxShowcase from "@/components/ParallaxShowcase";
-import DeviceShowcaseScroll from "@/components/DeviceShowcaseScroll";
 import StickyCardStack from "@/components/StickyCardStack";
+import ProjectShowcase from "@/components/ProjectShowcase";
 import SkillsMatrix from "@/components/SkillsMatrix";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ContactSection from "@/components/ContactSection";
@@ -17,16 +17,18 @@ import Footer from "@/components/Footer";
 import TerminalWidget from "@/components/TerminalWidget";
 import AmbientRainEffect from "@/components/AmbientRainEffect";
 import AmbientFogEffect from "@/components/AmbientFogEffect";
+import FloatingMusicPlayer from "@/components/FloatingMusicPlayer";
 
 export default function Home() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
+  const { scrollY } = useScroll();
 
   // Full-width continuous smooth background transition from Top Cream to Bottom Obsidian
+  // Stays light throughout Hero, Marquee, Manifesto, and Verified Certifications, then darkens AFTER certificates
   const backgroundColor = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.5, 0.7, 1],
-    ["#f8f7f4", "#f4f0e8", "#5c5752", "#18181c", "#09090b"]
+    scrollY,
+    [0, 2400, 3800, 5200, 6800],
+    ["#f8f7f4", "#f4f0e8", "#f4f0e8", "#18181c", "#09090b"]
   );
 
   return (
@@ -61,8 +63,8 @@ export default function Home() {
       {/* Sticky Stacking Cards on Scroll (Awards & Championships) */}
       <StickyCardStack />
 
-      {/* Operating Across Four Disciplines (Interactive Assembly & Real Audio Player) */}
-      <DeviceShowcaseScroll />
+      {/* Text-First Engineering Project Showcase with Expandable Archive */}
+      <ProjectShowcase />
 
       {/* Stack & Skills Matrix with Scroll Offsets */}
       <SkillsMatrix />
@@ -81,6 +83,9 @@ export default function Home() {
         isOpen={isTerminalOpen}
         onClose={() => setIsTerminalOpen(false)}
       />
+
+      {/* Persistent Floating Vinyl Music Player (Eleanor Whisper - Lalu Biru) */}
+      <FloatingMusicPlayer />
     </motion.main>
   );
 }
