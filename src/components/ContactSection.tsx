@@ -80,9 +80,6 @@ export default function ContactSection() {
         className="relative z-10 text-center max-w-4xl mx-auto"
       >
         {/* Header */}
-        <div className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3 font-medium">
-          [ 06 / GET IN TOUCH ]
-        </div>
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight mb-4">
           Let&apos;s build something together.
         </h2>

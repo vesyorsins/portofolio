@@ -90,9 +90,6 @@ export default function SkillsMatrix() {
     >
       {/* Header */}
       <div className="text-left mb-20">
-        <div className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3 font-medium">
-          [ 04 / TECHNICAL MATRIX ]
-        </div>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
           Core Stack & Technical Competencies
         </h2>

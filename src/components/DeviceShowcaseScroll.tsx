@@ -1059,9 +1059,6 @@ export default function DeviceShowcaseScroll() {
         
         {/* Section Header with Crisp White Text in Dark Realm */}
         <div className="text-center max-w-3xl mx-auto mb-6 z-30">
-          <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-2 font-bold">
-            [ 03 / OPERATING DISCIPLINES ]
-          </div>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight">
             Operating Across Four Disciplines
           </h2>
