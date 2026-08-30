@@ -6,6 +6,7 @@ import {
   useScroll,
   useTransform,
   useSpring,
+  AnimatePresence,
   MotionValue,
 } from "framer-motion";
 import {
@@ -27,9 +28,30 @@ import {
   Radio,
   Scan,
   Network,
-  Sparkles,
-  Layers,
 } from "lucide-react";
+
+interface AudioStateProps {
+  isPlaying: boolean;
+  currentTime: number;
+  duration: number;
+  volume: number;
+  isMuted: boolean;
+  currentTrack: {
+    title: string;
+    artist: string;
+    src: string;
+    cover: string;
+  };
+  audioRef: React.RefObject<HTMLAudioElement | null>;
+  togglePlay: () => void;
+  handleNext: () => void;
+  handlePrev: () => void;
+  toggleMute: () => void;
+  handleSeek: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setVolume: (v: number) => void;
+  setIsMuted: (m: boolean) => void;
+  formatTime: (secs: number) => string;
+}
 
 /* ----------------------------------------------------
    1. FRONTEND REALM PIECES (AUDIO & MOTION)
@@ -39,102 +61,31 @@ function FrontendAssembly({
   leftMotion,
   rightMotion,
   bottomMotion,
+  audio,
 }: {
   topMotion: { y: MotionValue<number>; opacity: MotionValue<number> };
   leftMotion: { x: MotionValue<number>; rotateY: MotionValue<number>; opacity: MotionValue<number> };
   rightMotion: { x: MotionValue<number>; rotateY: MotionValue<number>; opacity: MotionValue<number> };
   bottomMotion: { y: MotionValue<number>; opacity: MotionValue<number> };
+  audio: AudioStateProps;
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(38);
-  const [duration, setDuration] = useState(195);
-  const [volume, setVolume] = useState(0.8);
-  const [isMuted, setIsMuted] = useState(false);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const playlist = [
-    {
-      title: "Resonance // Cyber Ambient 60FPS",
-      artist: "Vesyorsins Sound Lab",
-      src: "https://actions.google.com/sounds/v1/ambient/relaxing_ambient_loop.ogg",
-      cover: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
-    },
-    {
-      title: "Synthesizer Dreamscape // WebGL",
-      artist: "Creative Motion Studio",
-      src: "https://actions.google.com/sounds/v1/science_fiction/ambient_hum_high.ogg",
-      cover: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80",
-    },
-  ];
-
-  const currentTrack = playlist[currentTrackIndex];
-
-  useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(currentTrack.src);
-      audioRef.current.volume = volume;
-      audioRef.current.loop = true;
-      audioRef.current.ontimeupdate = () => {
-        if (audioRef.current) setCurrentTime(Math.floor(audioRef.current.currentTime));
-      };
-      audioRef.current.onloadedmetadata = () => {
-        if (audioRef.current && audioRef.current.duration) setDuration(Math.floor(audioRef.current.duration));
-      };
-    }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(true));
-    }
-  };
-
-  const handleNext = () => {
-    const nextIdx = (currentTrackIndex + 1) % playlist.length;
-    setCurrentTrackIndex(nextIdx);
-    if (audioRef.current) {
-      audioRef.current.src = playlist[nextIdx].src;
-      if (isPlaying) audioRef.current.play();
-    }
-  };
-
-  const handlePrev = () => {
-    const prevIdx = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-    setCurrentTrackIndex(prevIdx);
-    if (audioRef.current) {
-      audioRef.current.src = playlist[prevIdx].src;
-      if (isPlaying) audioRef.current.play();
-    }
-  };
-
-  const toggleMute = () => {
-    if (!audioRef.current) return;
-    audioRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value);
-    setCurrentTime(val);
-    if (audioRef.current) audioRef.current.currentTime = val;
-  };
-
-  const formatTime = (secs: number) => {
-    const m = Math.floor(secs / 60);
-    const s = Math.floor(secs % 60);
-    return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
-  };
+  const {
+    isPlaying,
+    currentTime,
+    duration,
+    volume,
+    isMuted,
+    currentTrack,
+    audioRef,
+    togglePlay,
+    handleNext,
+    handlePrev,
+    toggleMute,
+    handleSeek,
+    setVolume,
+    setIsMuted,
+    formatTime,
+  } = audio;
 
   return (
     <div className="w-full h-full flex flex-col justify-between gap-4 select-none">
@@ -288,6 +239,7 @@ function FrontendAssembly({
                   const v = Number(e.target.value);
                   setVolume(v);
                   if (audioRef.current) audioRef.current.volume = v;
+                  if (isMuted && v > 0) setIsMuted(false);
                 }}
                 className="w-16 sm:w-20 h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
               />
@@ -636,7 +588,7 @@ function SecurityAssembly({
               <span>Red Team</span>
             </div>
             <div className="p-2 rounded-xl bg-zinc-800/60 border border-zinc-800 flex items-center justify-center gap-1.5 text-zinc-300">
-              <ShieldAlert className="w-3 h-3 text-amber-400" />
+              <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
               <span>OWASP 10</span>
             </div>
           </div>
@@ -869,8 +821,106 @@ export default function DeviceShowcaseScroll() {
   const springConfig = { stiffness: 180, damping: 26 };
   const smoothProgress = useSpring(scrollYProgress, springConfig);
 
+  // Audio Playback Master State
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(324); // 5m 24s for Lalu Biru
+  const [volume, setVolume] = useState(0.85);
+  const [isMuted, setIsMuted] = useState(false);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const playlist = [
+    {
+      title: "Lalu Biru",
+      artist: "Eleanor Whisper",
+      src: "/audio/lalu-biru.mp3",
+      cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      title: "Resonance // Cyber Ambient",
+      artist: "Vesyorsins Sound Lab",
+      src: "https://actions.google.com/sounds/v1/ambient/relaxing_ambient_loop.ogg",
+      cover: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
+    },
+  ];
+
+  const currentTrack = playlist[currentTrackIndex];
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+    }
+  }, [volume, isMuted]);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch((err) => {
+        console.error("Audio playback error:", err);
+      });
+    }
+  };
+
+  const handleNext = () => {
+    const nextIdx = (currentTrackIndex + 1) % playlist.length;
+    setCurrentTrackIndex(nextIdx);
+    if (audioRef.current) {
+      audioRef.current.src = playlist[nextIdx].src;
+      audioRef.current.play().catch(() => {});
+    }
+  };
+
+  const handlePrev = () => {
+    const prevIdx = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+    setCurrentTrackIndex(prevIdx);
+    if (audioRef.current) {
+      audioRef.current.src = playlist[prevIdx].src;
+      audioRef.current.play().catch(() => {});
+    }
+  };
+
+  const toggleMute = () => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value);
+    setCurrentTime(val);
+    if (audioRef.current) {
+      audioRef.current.currentTime = val;
+    }
+  };
+
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
+  };
+
+  const audioState: AudioStateProps = {
+    isPlaying,
+    currentTime,
+    duration,
+    volume,
+    isMuted,
+    currentTrack,
+    audioRef,
+    togglePlay,
+    handleNext,
+    handlePrev,
+    toggleMute,
+    handleSeek,
+    setVolume,
+    setIsMuted,
+    formatTime,
+  };
+
   // Helper hook to create 4-directional convergent assemble/disassemble transforms
-  // Phase ranges: [enterStart, enterSnap, exitStart, exitEnd]
   const createAssemblyMotion = (range: [number, number, number, number]) => {
     const [eStart, eSnap, xStart, xEnd] = range;
     return {
@@ -901,7 +951,7 @@ export default function DeviceShowcaseScroll() {
   const motion3 = createAssemblyMotion([0.49, 0.57, 0.72, 0.78]);
   const motion4 = createAssemblyMotion([0.74, 0.82, 0.98, 1]);
 
-  // Overall scale & visibility for each station
+  // Overall visibility for each station
   const stationOpacity1 = useTransform(smoothProgress, [0, 0.22, 0.28], [1, 1, 0]);
   const stationOpacity2 = useTransform(smoothProgress, [0.24, 0.32, 0.47, 0.53], [0, 1, 1, 0]);
   const stationOpacity3 = useTransform(smoothProgress, [0.49, 0.57, 0.72, 0.78], [0, 1, 1, 0]);
@@ -918,6 +968,10 @@ export default function DeviceShowcaseScroll() {
     });
   }, [scrollYProgress]);
 
+  // Title & Subtitle Color Transition on Scroll (Deliberately delayed so it stays dark on light bg, then shifts to white on dark bg)
+  const titleColor = useTransform(smoothProgress, [0.22, 0.48], ["#1c1917", "#ffffff"]);
+  const subtitleColor = useTransform(smoothProgress, [0.22, 0.48], ["#57534e", "#d4d4d8"]);
+
   const realmLabels = [
     "01 // FRONTEND AUDIO & 3D",
     "02 // DEVOPS & CLOUD",
@@ -926,18 +980,101 @@ export default function DeviceShowcaseScroll() {
   ];
 
   return (
-    <div ref={containerRef} className="relative w-full h-[400vh] bg-transparent">
+    <div ref={containerRef} id="disciplines" className="relative w-full h-[400vh] bg-transparent">
+      {/* Real HTML5 Audio Element */}
+      <audio
+        ref={audioRef}
+        src={currentTrack.src}
+        preload="auto"
+        onTimeUpdate={() => {
+          if (audioRef.current) {
+            setCurrentTime(Math.floor(audioRef.current.currentTime));
+          }
+        }}
+        onLoadedMetadata={() => {
+          if (audioRef.current && audioRef.current.duration) {
+            setDuration(Math.floor(audioRef.current.duration));
+          }
+        }}
+        onEnded={handleNext}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
+
+      {/* Persistent Floating Mini Vinyl Disc (Bottom-Right Dock when scrolled away) */}
+      <AnimatePresence>
+        {activeStep > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.6, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.6, y: 30 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            onClick={togglePlay}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 p-2 pr-4 rounded-full bg-[#101014]/95 backdrop-blur-xl border border-cyan-500/40 shadow-[0_8px_32px_rgba(0,0,0,0.6)] cursor-pointer group select-none hover:border-cyan-400 transition-colors"
+          >
+            {/* Mini Rotating Vinyl Disc */}
+            <div className="relative shrink-0">
+              <motion.div
+                animate={{ rotate: isPlaying ? 360 : 0 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="w-11 h-11 rounded-full bg-[#0d0d12] border-2 border-zinc-700/80 shadow-md flex items-center justify-center relative overflow-hidden"
+              >
+                {/* Concentric Grooves */}
+                <div className="absolute inset-1 rounded-full border border-zinc-800/80" />
+                <div className="absolute inset-2 rounded-full border border-zinc-800/60" />
+
+                {/* Center album art label */}
+                <div className="w-5 h-5 rounded-full overflow-hidden border border-cyan-400/60 flex items-center justify-center">
+                  <img src={currentTrack.cover} alt={currentTrack.title} className="w-full h-full object-cover" />
+                  <div className="absolute w-1.5 h-1.5 rounded-full bg-[#0d0d12] border border-white/60" />
+                </div>
+              </motion.div>
+
+              {/* Play/Pause Overlay Icon */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                {isPlaying ? <Pause className="w-3.5 h-3.5 text-white fill-white" /> : <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />}
+              </div>
+            </div>
+
+            {/* Track Info & Dynamic Equalizer Bars */}
+            <div className="flex flex-col min-w-0 pr-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-white tracking-tight truncate max-w-[140px]">
+                  {currentTrack.title}
+                </span>
+                {isPlaying && (
+                  <span className="flex items-center gap-0.5 h-2.5">
+                    <span className="w-0.5 h-2.5 bg-cyan-400 animate-pulse rounded-full" />
+                    <span className="w-0.5 h-1.5 bg-cyan-400 animate-pulse delay-75 rounded-full" />
+                    <span className="w-0.5 h-2 bg-cyan-400 animate-pulse delay-150 rounded-full" />
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-mono text-cyan-400">
+                {isPlaying ? "Eleanor Whisper • Playing" : "Paused • Click to Play"}
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Sticky Viewport Stage Frame */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-4 md:px-8 overflow-hidden [perspective:1400px]">
         
-        {/* Section Header */}
+        {/* Section Header with Dynamic Color Interpolation on Scroll */}
         <div className="text-center max-w-3xl mx-auto mb-6 z-30">
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-[#1c1917] tracking-tight leading-tight">
+          <motion.h2
+            style={{ color: titleColor }}
+            className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight transition-colors duration-200"
+          >
             Operating Across Four Disciplines
-          </h2>
-          <p className="text-stone-600 text-xs sm:text-sm mt-2 max-w-lg mx-auto font-normal">
-            Gulir ke bawah &mdash; saksikan komponen-komponen perakitan menyatu dari berbagai arah ke tengah layar.
-          </p>
+          </motion.h2>
+          <motion.p
+            style={{ color: subtitleColor }}
+            className="text-xs sm:text-sm mt-2 max-w-xl mx-auto font-normal leading-relaxed transition-colors duration-200"
+          >
+            Sinergi empat pilar rekayasa &mdash; menyatukan antarmuka kreatif 3D, otomasi cloud DevOps, ketangguhan keamanan siber, dan inferensi neural Machine Learning.
+          </motion.p>
 
           {/* Dynamic Scroll HUD Step Indicators */}
           <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
@@ -948,8 +1085,8 @@ export default function DeviceShowcaseScroll() {
                   key={label}
                   className={`px-3 py-1 rounded-full text-[11px] font-mono transition-all duration-300 border ${
                     isActive
-                      ? "bg-[#1c1917] text-white font-bold border-[#1c1917] shadow-md scale-105"
-                      : "bg-white/70 text-stone-500 border-stone-200"
+                      ? "bg-white text-[#101014] font-bold border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105"
+                      : "bg-[#14141a]/80 text-zinc-400 border-zinc-700/60 backdrop-blur-md"
                   }`}
                 >
                   <span>{label}</span>
@@ -975,6 +1112,7 @@ export default function DeviceShowcaseScroll() {
               leftMotion={motion1.left}
               rightMotion={motion1.right}
               bottomMotion={motion1.bottom}
+              audio={audioState}
             />
           </motion.div>
 

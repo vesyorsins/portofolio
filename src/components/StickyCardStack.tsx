@@ -114,6 +114,7 @@ export default function StickyCardStack() {
   return (
     <section
       ref={containerRef}
+      id="philosophy"
       className="relative w-full h-[400vh] bg-transparent"
     >
       {/* Sticky Viewport Frame - locks in place while user scrolls through the 400vh container */}

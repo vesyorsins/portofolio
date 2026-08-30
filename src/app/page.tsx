@@ -9,7 +9,6 @@ import ScrollVelocityMarquee from "@/components/ScrollVelocityMarquee";
 import ManifestoSection from "@/components/ManifestoSection";
 import ParallaxShowcase from "@/components/ParallaxShowcase";
 import DeviceShowcaseScroll from "@/components/DeviceShowcaseScroll";
-import Projects from "@/components/Projects";
 import StickyCardStack from "@/components/StickyCardStack";
 import SkillsMatrix from "@/components/SkillsMatrix";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
@@ -56,16 +55,13 @@ export default function Home() {
       {/* Word-by-Word Scroll Reveal Manifesto */}
       <ManifestoSection />
 
-      {/* 3D Isometric Multi-Row Parallax Stream (Opposite 3-Row Scroll) */}
+      {/* 3D Isometric Multi-Row Certificate Stream */}
       <ParallaxShowcase />
 
-      {/* 3D Container Scroll / Perspective Flip Dashboard */}
+      {/* Operating Across Four Disciplines (Interactive Assembly & Real Audio Player) */}
       <DeviceShowcaseScroll />
 
-      {/* 3D Perspective Tilt Project Showcase with Case Studies */}
-      <Projects />
-
-      {/* Sticky Stacking Cards on Scroll */}
+      {/* Sticky Stacking Cards on Scroll (Engineering Philosophy) */}
       <StickyCardStack />
 
       {/* Stack & Skills Matrix with Scroll Offsets */}

@@ -18,7 +18,7 @@ export default function Navbar({ onOpenTerminal }: NavbarProps) {
       // Switch from light to dark nav styling around scrollY 600
       setIsDarkZone(window.scrollY > 550);
 
-      const sections = ["hero", "projects", "skills", "experience", "contact"];
+      const sections = ["hero", "disciplines", "philosophy", "skills", "experience", "contact"];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -40,7 +40,8 @@ export default function Navbar({ onOpenTerminal }: NavbarProps) {
 
   const navLinks = [
     { name: "Overview", href: "#hero", id: "hero" },
-    { name: "Works", href: "#projects", id: "projects" },
+    { name: "Disciplines", href: "#disciplines", id: "disciplines" },
+    { name: "Philosophy", href: "#philosophy", id: "philosophy" },
     { name: "Stack", href: "#skills", id: "skills" },
     { name: "Experience", href: "#experience", id: "experience" },
     { name: "Contact", href: "#contact", id: "contact" },
