@@ -1,190 +1,179 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   motion,
   useScroll,
   useTransform,
   useSpring,
-  MotionValue,
+  useVelocity,
+  useAnimationFrame,
+  useMotionValue,
 } from "framer-motion";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { GithubIcon } from "@/components/Icons";
 
-interface ParallaxItem {
+interface CertificatePhoto {
   title: string;
-  category: string;
-  tech: string;
-  metric: string;
-  link: string;
-  github?: string;
+  issuer: string;
+  image: string;
 }
 
-const row1Items: ParallaxItem[] = [
+const row1Certificates: CertificatePhoto[] = [
   {
-    title: "NeuroNexus LLM Orchestrator",
-    category: "Distributed AI Pipeline",
-    tech: "Next.js 16 • Groq • Pinecone • FastAPI",
-    metric: "< 380ms Latency (TTFT)",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "AWS Certified Solutions Architect",
+    issuer: "Amazon Web Services",
+    image: "https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Aetheria 3D Physics WebGL",
-    category: "Creative Engineering",
-    tech: "Three.js • React Three Fiber • Rapier WASM",
-    metric: "60 FPS GPU-Locked",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Google Cloud Professional Architect",
+    issuer: "Google Cloud",
+    image: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "TerraFlow Stream Ingestion",
-    category: "High-Throughput Analytics",
-    tech: "Apache Kafka • TimescaleDB • TypeScript",
-    metric: "50k events / second",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Meta Advanced Full-Stack Engineer",
+    issuer: "Meta",
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Vortex Raymarching Engine",
-    category: "GPU Compute & Shaders",
-    tech: "GLSL • WebGL 2.0 • Post-Processing",
-    metric: "4K Realtime Volumetrics",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Generative AI & LLM Systems Specialization",
+    issuer: "DeepLearning.AI & Stanford",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
-const row2Items: ParallaxItem[] = [
+const row2Certificates: CertificatePhoto[] = [
   {
-    title: "Quantum Kinetic Component Kit",
-    category: "UI Design Architecture",
-    tech: "React 19 • Framer Motion • Radix UI",
-    metric: "2.4k+ GitHub Stars",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Linux Foundation Certified SysAdmin (LFCS)",
+    issuer: "The Linux Foundation",
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Synthetix Neural Audio Pipeline",
-    category: "Audio Processing",
-    tech: "Python • PyTorch • ONNX Runtime",
-    metric: "99.2% Prosody Score",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "HashiCorp Certified Terraform Associate",
+    issuer: "HashiCorp",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "CyberPulse Cluster Telemetry",
-    category: "Distributed Observability",
-    tech: "Go • WebSocket • Prometheus • Docker",
-    metric: "99.99% Node Accuracy",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Microsoft Azure AI Engineer Associate",
+    issuer: "Microsoft",
+    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Tactile 3D Physics Badge",
-    category: "Interactive WebGL Canvas",
-    tech: "R3F • Rapier Cloth Kinematics",
-    metric: "Inertia Drag Physics",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Docker Certified Associate (DCA)",
+    issuer: "Docker",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
-const row3Items: ParallaxItem[] = [
+const row3Certificates: CertificatePhoto[] = [
   {
-    title: "HyperVector KNN Search",
-    category: "Vector Index Engine",
-    tech: "Rust • HNSW Indexing • gRPC",
-    metric: "Sub-15ms KNN Retrieval",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Three.js & WebGL 3D Specialization",
+    issuer: "Bruno Simon",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Chronos Financial Telemetry",
-    category: "Market Data Engine",
-    tech: "Next.js • Redis Streams • PostgreSQL",
-    metric: "Microsecond Order Aggregation",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "MongoDB Certified Developer Associate",
+    issuer: "MongoDB University",
+    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Aura Multimodal Vision Agent",
-    category: "Computer Vision Pipeline",
-    tech: "Gemini Pro • OpenCV • Python",
-    metric: "Zero-Shot Video Parsing",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Neo4j Certified Graph Professional",
+    issuer: "Neo4j Graph Academy",
+    image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Apex Edge Micro-frontend Router",
-    category: "Cloud Native Routing",
-    tech: "Cloudflare Workers • Vercel Edge • WASM",
-    metric: "12ms Global Edge Resolution",
-    link: "https://github.com",
-    github: "https://github.com",
+    title: "Kubernetes Cloud Native Associate (KCNA)",
+    issuer: "CNCF & Linux Foundation",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
-function ShowcaseCard({ item, translate }: { item: ParallaxItem; translate: MotionValue<number> }) {
+function wrap(min: number, max: number, v: number) {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+}
+
+function CertificatePhotoCard({ cert }: { cert: CertificatePhoto }) {
   return (
     <motion.div
-      style={{ x: translate }}
-      whileHover={{ y: -12, borderColor: "#1c1917" }}
-      transition={{ duration: 0.25 }}
-      className="group/card relative h-[250px] w-[340px] sm:w-[400px] shrink-0 rounded-2xl p-6 bg-[#141418] border border-zinc-800 shadow-2xl overflow-hidden flex flex-col justify-between select-none"
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+      className="group/cert relative h-[220px] sm:h-[260px] w-[340px] sm:w-[420px] shrink-0 rounded-2xl p-2 bg-white/90 backdrop-blur-md border border-[#e6e3db] shadow-xl overflow-hidden flex flex-col justify-between select-none cursor-pointer"
     >
-      {/* Card Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 mb-2.5 font-medium">
-            {item.category}
+      {/* Clean Certificate Photo Frame */}
+      <div className="relative w-full h-full rounded-xl overflow-hidden bg-stone-100">
+        <motion.img
+          src={cert.image}
+          alt={cert.title}
+          draggable={false}
+          className="w-full h-full object-cover object-center group-hover/cert:scale-105 transition-transform duration-500 pointer-events-none select-none"
+        />
+
+        {/* Subtle Dark Vignette / Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none" />
+
+        {/* Bottom Title & Issuer Label */}
+        <div className="absolute bottom-0 inset-x-0 p-4 z-10 text-white pointer-events-none">
+          <span className="text-[11px] font-mono text-zinc-300 block mb-0.5">
+            {cert.issuer}
           </span>
-          <h4 className="text-lg sm:text-xl font-bold text-white group-hover/card:text-zinc-200 transition-colors leading-snug">
-            {item.title}
+          <h4 className="text-sm sm:text-base font-bold tracking-tight text-white leading-snug drop-shadow-md">
+            {cert.title}
           </h4>
-        </div>
-
-        <div className="flex items-center gap-1.5">
-          {item.github && (
-            <a
-              href={item.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
-              title="GitHub Repo"
-            >
-              <GithubIcon className="w-3.5 h-3.5" />
-            </a>
-          )}
-          <a
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
-            title="Explore"
-          >
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </a>
-        </div>
-      </div>
-
-      {/* Card Body & Metric */}
-      <div className="space-y-2.5">
-        <div className="p-3 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex items-center justify-between">
-          <span className="text-xs font-mono text-zinc-400">{item.tech}</span>
-          <span className="text-xs font-mono text-white font-medium shrink-0 ml-2">
-            {item.metric}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500">
-          <span>PARALLAX_STREAM</span>
-          <span className="text-zinc-300 font-medium group-hover/card:text-white flex items-center gap-1">
-            VIEW DETAILS <ArrowRight className="w-3 h-3" />
-          </span>
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function InfiniteParallaxRow({
+  items,
+  baseVelocity = -0.7,
+}: {
+  items: CertificatePhoto[];
+  baseVelocity: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const baseX = useMotionValue(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  });
+
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 1.8], {
+    clamp: false,
+  });
+
+  // Seamless modulo wrap between -50% and 0%
+  const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
+
+  useAnimationFrame((_, delta) => {
+    // Smooth, calm gliding speed (slows down further if hovered for effortless reading)
+    const speedMultiplier = isHovered ? 0.3 : 1;
+    let moveBy = baseVelocity * (delta / 1000) * 1.8 * speedMultiplier;
+    
+    if (velocityFactor.get() !== 0) {
+      moveBy += baseVelocity * Math.min(velocityFactor.get(), 2.0) * (delta / 1000) * 2.5 * speedMultiplier;
+    }
+    
+    baseX.set(baseX.get() + moveBy);
+  });
+
+  // Duplicate items 4 times to ensure uninterrupted infinite carousel looping
+  const duplicatedItems = [...items, ...items, ...items, ...items];
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="overflow-hidden whitespace-nowrap flex flex-nowrap select-none w-full py-1"
+    >
+      <motion.div className="flex gap-5 md:gap-6 shrink-0" style={{ x }}>
+        {duplicatedItems.map((cert, idx) => (
+          <CertificatePhotoCard key={idx} cert={cert} />
+        ))}
+      </motion.div>
+    </div>
   );
 }
 
@@ -203,30 +192,22 @@ export default function ParallaxShowcase() {
   const translateY = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [-180, 0, 180]), springConfig);
   const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.5, 1, 1, 0.5]);
 
-  // Horizontal 3-Row opposite movement
-  const translateXRow1 = useSpring(useTransform(scrollYProgress, [0, 1], [-400, 400]), springConfig);
-  const translateXRow2 = useSpring(useTransform(scrollYProgress, [0, 1], [400, -400]), springConfig);
-  const translateXRow3 = useSpring(useTransform(scrollYProgress, [0, 1], [-350, 350]), springConfig);
-
   return (
     <section
       ref={ref}
-      className="relative w-full min-h-[200vh] py-32 overflow-hidden flex flex-col items-center justify-center bg-transparent"
+      className="relative w-full min-h-[190vh] py-32 overflow-hidden flex flex-col items-center justify-center bg-transparent"
     >
-      {/* Clean Header without Card Background, matching Hero Typography */}
+      {/* Clean Header */}
       <div className="relative z-20 text-center max-w-3xl mx-auto px-4 mb-20">
-        <div className="text-xs font-mono text-stone-500 uppercase tracking-widest mb-3 font-medium">
-          [ 01 / PARALLAX SHOWCASE ]
-        </div>
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-[#1c1917] tracking-tight leading-tight">
-          Selected Engineering Works
+          Verified Certifications & Accreditations
         </h2>
         <p className="text-stone-600 text-sm md:text-base mt-3 max-w-xl mx-auto font-normal">
-          Multi-layer isometric 3D stream showing verified production systems, real-time architectures, and creative web experiments.
+          Official engineering certifications, cloud credentials, and specialized technical achievements.
         </p>
       </div>
 
-      {/* 3D Isometric Viewport Container */}
+      {/* 3D Isometric Viewport Container with Slow, Calm Infinite Looping Rows */}
       <motion.div
         style={{
           rotateX,
@@ -238,26 +219,14 @@ export default function ParallaxShowcase() {
         }}
         className="w-full flex flex-col gap-6 md:gap-8 relative z-10"
       >
-        {/* Row 1: Slides Right */}
-        <div className="flex gap-5 md:gap-6 justify-center">
-          {[...row1Items, ...row1Items].map((item, idx) => (
-            <ShowcaseCard key={`r1-${idx}`} item={item} translate={translateXRow1} />
-          ))}
-        </div>
+        {/* Row 1: Gentle Gliding to the Left */}
+        <InfiniteParallaxRow items={row1Certificates} baseVelocity={-0.7} />
 
-        {/* Row 2: Slides Left */}
-        <div className="flex gap-5 md:gap-6 justify-center">
-          {[...row2Items, ...row2Items].map((item, idx) => (
-            <ShowcaseCard key={`r2-${idx}`} item={item} translate={translateXRow2} />
-          ))}
-        </div>
+        {/* Row 2: Gentle Gliding to the Right */}
+        <InfiniteParallaxRow items={row2Certificates} baseVelocity={0.7} />
 
-        {/* Row 3: Slides Right */}
-        <div className="flex gap-5 md:gap-6 justify-center">
-          {[...row3Items, ...row3Items].map((item, idx) => (
-            <ShowcaseCard key={`r3-${idx}`} item={item} translate={translateXRow3} />
-          ))}
-        </div>
+        {/* Row 3: Gentle Gliding to the Left */}
+        <InfiniteParallaxRow items={row3Certificates} baseVelocity={-0.6} />
       </motion.div>
     </section>
   );
