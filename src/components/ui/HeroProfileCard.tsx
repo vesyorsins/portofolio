@@ -91,7 +91,7 @@ export default function HeroProfileCard({
   };
 
   // Live 3D rotation in place while panning/swiping horizontally
-  const handlePan = (_: any, info: PanInfo) => {
+  const handlePan = (_: PointerEvent, info: PanInfo) => {
     const angleDelta = (info.offset.x / 180) * 50;
     dragOffsetAngle.set(angleDelta);
   };
@@ -99,7 +99,7 @@ export default function HeroProfileCard({
   // Directional swipe logic:
   // - Swiping LEFT (drag < -20px or velocity < -120) rotates counter-clockwise by -180 deg
   // - Swiping RIGHT (drag > 20px or velocity > 120) rotates clockwise by +180 deg
-  const handlePanEnd = (_: any, info: PanInfo) => {
+  const handlePanEnd = (_: PointerEvent, info: PanInfo) => {
     dragOffsetAngle.set(0);
     const threshold = 20;
     const velocityThreshold = 120;

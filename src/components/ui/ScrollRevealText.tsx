@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 
 interface ScrollRevealTextProps {
   children: string;
   className?: string;
 }
 
-function Word({ children, progress, range }: { children: string; progress: any; range: [number, number] }) {
+function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
   const opacity = useTransform(progress, range, [0, 1]);
   return (
     <span className="relative inline-block mr-[0.28em] mb-[0.1em]">

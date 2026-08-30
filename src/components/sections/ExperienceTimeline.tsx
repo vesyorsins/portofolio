@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Calendar, MapPin, CheckCircle2, Milestone } from "lucide-react";
+import { Calendar, MapPin, CheckCircle2 } from "lucide-react";
 import { experiences } from "@/data/experience";
 
 export default function ExperienceTimeline() {
@@ -118,7 +118,7 @@ export default function ExperienceTimeline() {
             <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
           </div>
           <span className="text-[11px] font-mono text-zinc-400">
-            // CAREER TIMELINE GENESIS
+            {"// CAREER TIMELINE GENESIS"}
           </span>
         </div>
       </div>

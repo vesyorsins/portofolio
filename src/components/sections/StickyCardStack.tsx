@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Trophy, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { championshipCards } from "@/data/awards";
 
 export default function StickyCardStack() {
