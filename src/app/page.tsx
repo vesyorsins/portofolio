@@ -16,6 +16,8 @@ import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import TerminalWidget from "@/components/TerminalWidget";
+import AmbientRainEffect from "@/components/AmbientRainEffect";
+import AmbientFogEffect from "@/components/AmbientFogEffect";
 
 export default function Home() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
@@ -33,10 +35,16 @@ export default function Home() {
       style={{ backgroundColor }}
       className="relative flex flex-col min-h-screen w-full overflow-x-clip transition-colors duration-200"
     >
+      {/* Ambient Rain / Water Droplets Stream (Emerges in the dark realm) */}
+      <AmbientRainEffect />
+
+      {/* Ambient Volumetric Rolling Mist / Fog (Emerges at the bottom deep black zone) */}
+      <AmbientFogEffect />
+
       {/* Floating Island Navigation */}
       <Navbar onOpenTerminal={() => setIsTerminalOpen(true)} />
 
-      {/* Hero with 3D WebGL Canvas & Layered Scroll Parallax */}
+      {/* Hero with 3D Holographic Tilt Portrait Card & Layered Scroll Parallax */}
       <Hero onOpenTerminal={() => setIsTerminalOpen(true)} />
 
       {/* Real-time HUD stats metrics */}

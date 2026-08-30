@@ -2,21 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import dynamic from "next/dynamic";
 import { ArrowUpRight, Copy, Check, Mail, Terminal } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/Icons";
-
-const Hero3DCanvas = dynamic(() => import("./3d/Hero3DCanvas"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[380px] md:h-[480px] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-2">
-        <div className="w-8 h-8 rounded-full border-2 border-stone-300 border-t-stone-800 animate-spin" />
-        <span className="text-xs font-mono text-stone-500">LOADING 3D CANVAS</span>
-      </div>
-    </div>
-  ),
-});
+import HeroProfileCard from "@/components/HeroProfileCard";
 
 interface HeroProps {
   onOpenTerminal?: () => void;
@@ -35,7 +23,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
   const springConfig = { stiffness: 180, damping: 25 };
   const textY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 140]), springConfig);
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const canvasScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 0.9]), springConfig);
+  const cardScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 0.9]), springConfig);
 
   const roles = [
     "Full-Stack Software Engineer",
@@ -65,7 +53,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
     <section
       ref={containerRef}
       id="hero"
-      className="relative w-full min-h-[92vh] flex items-center justify-center pt-28 pb-20 px-4 md:px-8 overflow-hidden bg-transparent"
+      className="relative w-full min-h-[94vh] flex items-center justify-center pt-28 pb-20 px-4 md:px-8 overflow-hidden bg-transparent"
     >
       <div className="relative max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
         
@@ -219,18 +207,18 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
 
         </motion.div>
 
-        {/* Right Column: 3D Porcelain Kinetic Sculpture */}
+        {/* Right Column: 3D Holographic Tilt Portrait Card with Floating Parallax Badges */}
         <motion.div
-          style={{ scale: canvasScale }}
+          style={{ scale: cardScale }}
           className="lg:col-span-5 relative flex items-center justify-center"
         >
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="w-full relative"
           >
-            <Hero3DCanvas />
+            <HeroProfileCard />
           </motion.div>
         </motion.div>
 
