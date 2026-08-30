@@ -90,19 +90,19 @@ export default function HeroProfileCard({
     mouseY.set(0);
   };
 
-  // Live 3D rotation while dragging horizontally following drag direction
-  const handleDrag = (_: any, info: PanInfo) => {
+  // Live 3D rotation in place while panning/swiping horizontally
+  const handlePan = (_: any, info: PanInfo) => {
     const angleDelta = (info.offset.x / 180) * 50;
     dragOffsetAngle.set(angleDelta);
   };
 
   // Directional swipe logic:
-  // - Swiping LEFT (drag < -25px or velocity < -150) rotates counter-clockwise by -180 deg
-  // - Swiping RIGHT (drag > 25px or velocity > 150) rotates clockwise by +180 deg
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  // - Swiping LEFT (drag < -20px or velocity < -120) rotates counter-clockwise by -180 deg
+  // - Swiping RIGHT (drag > 20px or velocity > 120) rotates clockwise by +180 deg
+  const handlePanEnd = (_: any, info: PanInfo) => {
     dragOffsetAngle.set(0);
-    const threshold = 25;
-    const velocityThreshold = 150;
+    const threshold = 20;
+    const velocityThreshold = 120;
 
     if (info.offset.x < -threshold || info.velocity.x < -velocityThreshold) {
       setRotationAngle((prev) => prev - 180);
@@ -171,13 +171,10 @@ export default function HeroProfileCard({
         </div>
       </motion.div>
 
-      {/* 3D DOUBLE-SIDED CARD FLIP CONTAINER */}
+      {/* 3D DOUBLE-SIDED CARD FLIP CONTAINER - Stays 100% in place while rotating */}
       <motion.div
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.4}
-        onDrag={handleDrag}
-        onDragEnd={handleDragEnd}
+        onPan={handlePan}
+        onPanEnd={handlePanEnd}
         onClick={handleClick}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -186,7 +183,7 @@ export default function HeroProfileCard({
           rotateY: combinedRotateY,
           transformStyle: "preserve-3d",
         }}
-        className="relative w-full aspect-[4/5] cursor-pointer active:cursor-grabbing will-change-transform rounded-3xl"
+        className="relative w-full aspect-[4/5] cursor-pointer will-change-transform rounded-3xl"
       >
         {/* ========================================================================= */}
         {/* FRONT FACE: 3D Holographic Portrait Photo Card (Visible at 0deg)           */}
