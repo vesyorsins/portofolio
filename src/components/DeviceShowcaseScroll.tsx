@@ -99,18 +99,18 @@ function FrontendAssembly({
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold border border-cyan-500/30 flex items-center gap-1.5">
               <Code2 className="w-3.5 h-3.5" />
-              <span>DISCIPLINE 01 // FRONTEND & 3D WEB AUDIO</span>
+              <span>DISCIPLINE 01 // MODERN WEB & DYNAMIC AUDIO</span>
             </span>
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
-            Creative Frontend & WebGL Motion Studio
+            Modern Web Development & Interactive Audio UI
           </h3>
         </div>
 
         <div className="flex items-center gap-2">
           <div className="px-3 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-right">
-            <span className="text-[10px] font-mono text-zinc-400 block">WEB AUDIO ENGINE</span>
-            <span className="text-xs font-mono font-bold text-cyan-300">60 FPS REALTIME</span>
+            <span className="text-[10px] font-mono text-zinc-400 block">WEB ARCHITECTURE</span>
+            <span className="text-xs font-mono font-bold text-cyan-300">REACT 19 // NEXT.JS 16</span>
           </div>
         </div>
       </motion.div>
@@ -259,15 +259,15 @@ function FrontendAssembly({
           <div className="space-y-2 text-xs font-mono text-zinc-300">
             <div className="p-2 rounded-lg bg-zinc-800/60 border border-zinc-800 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-              <span>HTML5 Web Audio & Frequency Analyser</span>
+              <span>Next.js 16 App Router & Server Components</span>
             </div>
             <div className="p-2 rounded-lg bg-zinc-800/60 border border-zinc-800 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-              <span>Three.js / WebGL Shaders</span>
+              <span>HTML5 Web Audio & Realtime Spectrum</span>
             </div>
             <div className="p-2 rounded-lg bg-zinc-800/60 border border-zinc-800 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-              <span>Next.js 16 SSR & Micro-interactions</span>
+              <span>Type-Safe TypeScript & State Management</span>
             </div>
           </div>
 
@@ -297,7 +297,7 @@ function FrontendAssembly({
       >
         <span className="text-zinc-400">CORE ARSENAL:</span>
         <div className="flex flex-wrap gap-1.5">
-          {["Next.js 16", "React 19", "Three.js (R3F)", "Web Audio API", "Framer Motion", "Tailwind v4"].map((t) => (
+          {["Next.js 16", "React 19", "TypeScript", "Web Audio API", "Framer Motion", "Tailwind CSS"].map((t) => (
             <span key={t} className="px-2 py-0.5 rounded bg-zinc-800 text-cyan-300 border border-cyan-500/20 text-[11px]">
               {t}
             </span>
@@ -968,12 +968,8 @@ export default function DeviceShowcaseScroll() {
     });
   }, [scrollYProgress]);
 
-  // Title & Subtitle Color Transition on Scroll (Deliberately delayed so it stays dark on light bg, then shifts to white on dark bg)
-  const titleColor = useTransform(smoothProgress, [0.22, 0.48], ["#1c1917", "#ffffff"]);
-  const subtitleColor = useTransform(smoothProgress, [0.22, 0.48], ["#57534e", "#d4d4d8"]);
-
   const realmLabels = [
-    "01 // FRONTEND AUDIO & 3D",
+    "01 // FRONTEND & WEB APPS",
     "02 // DEVOPS & CLOUD",
     "03 // PENETRATION TESTING",
     "04 // MACHINE LEARNING & AI",
@@ -1061,20 +1057,17 @@ export default function DeviceShowcaseScroll() {
       {/* Sticky Viewport Stage Frame */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-4 md:px-8 overflow-hidden [perspective:1400px]">
         
-        {/* Section Header with Dynamic Color Interpolation on Scroll */}
+        {/* Section Header with Crisp White Text in Dark Realm */}
         <div className="text-center max-w-3xl mx-auto mb-6 z-30">
-          <motion.h2
-            style={{ color: titleColor }}
-            className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight transition-colors duration-200"
-          >
+          <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-2 font-bold">
+            [ 03 / OPERATING DISCIPLINES ]
+          </div>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight">
             Operating Across Four Disciplines
-          </motion.h2>
-          <motion.p
-            style={{ color: subtitleColor }}
-            className="text-xs sm:text-sm mt-2 max-w-xl mx-auto font-normal leading-relaxed transition-colors duration-200"
-          >
-            Sinergi empat pilar rekayasa &mdash; menyatukan antarmuka kreatif 3D, otomasi cloud DevOps, ketangguhan keamanan siber, dan inferensi neural Machine Learning.
-          </motion.p>
+          </h2>
+          <p className="text-xs sm:text-sm mt-2 max-w-xl mx-auto text-zinc-300 font-normal leading-relaxed">
+            Sinergi empat pilar rekayasa &mdash; membangun aplikasi web modern berperforma tinggi, otomasi infrastruktur cloud DevOps, audit keamanan siber ofensif, dan integrasi cerdas Machine Learning.
+          </p>
 
           {/* Dynamic Scroll HUD Step Indicators */}
           <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
@@ -1085,8 +1078,8 @@ export default function DeviceShowcaseScroll() {
                   key={label}
                   className={`px-3 py-1 rounded-full text-[11px] font-mono transition-all duration-300 border ${
                     isActive
-                      ? "bg-white text-[#101014] font-bold border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105"
-                      : "bg-[#14141a]/80 text-zinc-400 border-zinc-700/60 backdrop-blur-md"
+                      ? "bg-cyan-500 text-[#09090d] font-bold border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] scale-105"
+                      : "bg-[#14141a]/90 text-zinc-400 border-zinc-700/60 backdrop-blur-md"
                   }`}
                 >
                   <span>{label}</span>

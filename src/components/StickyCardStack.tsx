@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
-import { CheckCircle2, Zap } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Trophy, Award, Medal, Sparkles, CheckCircle2 } from "lucide-react";
 
-interface PhilosophyCard {
+interface ChampionshipCard {
   number: string;
+  badge: string;
   title: string;
   tagline: string;
   category: string;
@@ -14,61 +15,65 @@ interface PhilosophyCard {
   bullets: string[];
 }
 
-const cards: PhilosophyCard[] = [
+const championshipCards: ChampionshipCard[] = [
   {
     number: "01",
-    title: "Multi-Tier Autonomous Inference & Routing",
-    category: "Distributed AI Architecture",
-    tagline: "Sub-second reasoning with deterministic fallback guarantees",
+    badge: "1ST PLACE // NATIONAL CHAMPION 🏆",
+    title: "National Cyber Defense & CTF Championship",
+    category: "Offensive Security & Red Teaming",
+    tagline: "Rank 1 out of 120+ professional and collegiate security teams",
     description:
-      "Arsitektur inferensi yang mengarahkan tugas kognitif cepat ke Groq (LLaMA 3.1) untuk latency sub-400ms dan secara otomatis beralih ke Google Gemini 1.5 Flash untuk analisis konteks multimodal yang mendalam.",
-    stats: "< 380ms TTFT • 99.98% Reliability",
+      "Memimpin tim dalam kompetisi Capture The Flag (CTF) tingkat nasional, memecahkan 18 tantangan eksploitasi biner, reverse engineering, dan zero-day payload mitigation dalam maraton 24 jam non-stop.",
+    stats: "1st Place Winner • Score: 4,850 Pts • 0 Breaches",
     bullets: [
-      "Real-time token streaming over WebSockets without buffering",
-      "Vector-indexed semantic memory retrieval (Pinecone HNSW)",
-      "Automated evaluation suites for model accuracy & guardrails",
+      "Binary exploitation & buffer overflow payload analysis",
+      "Reverse engineering proprietary protocol obfuscation",
+      "Web application vulnerability hunting & zero-day patch mitigation",
     ],
   },
   {
     number: "02",
-    title: "GPU-Accelerated 3D WebGL & Physics",
-    category: "Creative Engineering",
-    tagline: "Hardware-accelerated WebGL locked at constant 60 FPS",
+    badge: "1ST PLACE // BEST TECHNICAL ARCHITECTURE 🥇",
+    title: "Global AI Systems & Autonomous Agent Summit",
+    category: "Generative AI & Machine Learning",
+    tagline: "Sub-300ms multi-agent autonomous reasoning engine",
     description:
-      "Mengintegrasikan Three.js, React Three Fiber (R3F), dan Rapier Physics berbasis WebAssembly. Setiap kalkulasi gravitasi, inersia, dan partikel diproses langsung di GPU tanpa membebani thread utama JavaScript.",
-    stats: "60 FPS GPU-Locked • 0 Dropped Frames",
+      "Membangun arsitektur multi-agent terdistribusi berbasis quantized LLM dan vector search RAG (Pinecone) untuk analisis data kompleks real-time dengan akurasi semantik tinggi dan zero latency delay.",
+    stats: "1st Place Winner • 85 Finalist Teams • Sub-300ms Latency",
     bullets: [
-      "Custom GLSL raymarching & post-processing shaders",
-      "Deterministic rigid body & cloth physics via WebAssembly",
-      "Adaptive DPR scaling for optimal mobile battery & frame rate",
+      "Deterministic agent routing with zero hallucination loops",
+      "High-throughput vector indexing handling 1M+ embeddings",
+      "Streamed token inference architecture over WebSocket",
     ],
   },
   {
     number: "03",
-    title: "Event-Driven Data Mesh & Telemetry",
-    category: "Backend & Infrastructure",
-    tagline: "High-throughput stream processing handling 50k+ req/sec",
+    badge: "GRAND CHAMPION // 1ST PLACE 🏆",
+    title: "Cloud Infrastructure & DevOps Resilience Cup",
+    category: "Site Reliability & Cloud Architecture",
+    tagline: "Zero-downtime multi-region Kubernetes chaos challenge",
     description:
-      "Sistem pemrosesan stream real-time memanfaatkan Apache Kafka dan database time-series TimescaleDB, memungkinkan visualisasi jutaan titik telemetri secara instan tanpa lag atau bottleneck.",
-    stats: "50,000 req / sec • Sub-50ms Query Time",
+      "Mendesain dan mempertahankan infrastruktur cloud skala masif di AWS menggunakan Terraform IaC, auto-scaling Kubernetes, dan bertahan dari skenario chaos injection tanpa pernah kehilangan request.",
+    stats: "Grand Champion • 99.999% SLA • Zero Dropped Requests",
     bullets: [
-      "Zero-copy Kafka streaming ingestion pipelines",
-      "Continuous materialization views di TimescaleDB",
-      "Comprehensive telemetry observability via Prometheus & Grafana",
+      "Automated blue/green canary deployments with Helm",
+      "Multi-region failover and distributed ingress routing",
+      "Prometheus & Grafana automated chaos remediation",
     ],
   },
   {
     number: "04",
-    title: "Kinetic UI & Physics-Driven Motion",
-    category: "Frontend Experience",
-    tagline: "Organic spring kinematics with zero layout shift",
+    badge: "1ST PLACE // BEST WEB APPLICATION 🏅",
+    title: "National Web Innovation & Software Engineering Competition",
+    category: "Full-Stack & Interactive Web Engineering",
+    tagline: "Sub-second load times with 100/100 Lighthouse performance",
     description:
-      "Transisi antarmuka memanfaatkan spring physics alami (Framer Motion & GSAP Timelines) dipadukan dengan Lenis momentum scroll untuk menghadirkan pengalaman navigasi berkelas tinggi tanpa distraksi visual.",
-    stats: "100 / 100 Lighthouse • WAI-ARIA Compliant",
+      "Merancang dan mengembangkan platform web interaktif skala penuh dengan arsitektur modern, optimalisasi Core Web Vitals, dan integrasi Web Audio dinamis dengan skor performa sempurna 100/100.",
+    stats: "1st Place Winner • 100/100 Lighthouse • Sub-1s LCP",
     bullets: [
-      "Hardware-accelerated CSS transforms on composited layers",
-      "Lenis smooth inertia scrolling engine with RAF synchronization",
-      "Tactile hover micro-interactions and accessible focus states",
+      "Server-Side Rendering (SSR) & dynamic state caching",
+      "Fluid motion micro-interactions with zero layout shift",
+      "Full WCAG/WAI-ARIA accessibility compliance",
     ],
   },
 ];
@@ -83,109 +88,128 @@ export default function StickyCardStack() {
   });
 
   const springConfig = { stiffness: 200, damping: 30 };
+  const smoothProgress = useSpring(scrollYProgress, springConfig);
+
+  // Dynamic Header Colors: Starts in the same dark tone as Verified Certifications (#1c1917 & #57534e) and transitions into Pure White (#ffffff & #d4d4d8) on scroll
+  const titleColor = useTransform(smoothProgress, [0.06, 0.28], ["#1c1917", "#ffffff"]);
+  const subtitleColor = useTransform(smoothProgress, [0.06, 0.28], ["#57534e", "#d4d4d8"]);
 
   // Card 0 (Base card - stays pinned and scales down as cards stack on it)
   const scale0 = useSpring(useTransform(scrollYProgress, [0, 0.35, 0.65, 0.95], [1, 0.95, 0.9, 0.85]), springConfig);
-  const brightness0 = useTransform(scrollYProgress, [0, 0.35, 0.65, 0.95], [1, 0.85, 0.72, 0.6]);
+  const filter0 = useTransform(scrollYProgress, [0, 0.35, 0.65, 0.95], ["brightness(1)", "brightness(0.85)", "brightness(0.72)", "brightness(0.6)"]);
 
   // Card 1 (Slides up from 100vh to 0px between scroll 0.12 and 0.36)
   const rawY1 = useTransform(scrollYProgress, [0.12, 0.36], ["100vh", "0vh"]);
   const y1 = useSpring(rawY1, springConfig);
   const scale1 = useSpring(useTransform(scrollYProgress, [0.36, 0.65, 0.95], [1, 0.95, 0.9]), springConfig);
-  const brightness1 = useTransform(scrollYProgress, [0.36, 0.65, 0.95], [1, 0.85, 0.72]);
+  const filter1 = useTransform(scrollYProgress, [0.36, 0.65, 0.95], ["brightness(1)", "brightness(0.85)", "brightness(0.72)"]);
 
   // Card 2 (Slides up from 100vh to 0px between scroll 0.42 and 0.66)
   const rawY2 = useTransform(scrollYProgress, [0.42, 0.66], ["100vh", "0vh"]);
   const y2 = useSpring(rawY2, springConfig);
   const scale2 = useSpring(useTransform(scrollYProgress, [0.66, 0.95], [1, 0.95]), springConfig);
-  const brightness2 = useTransform(scrollYProgress, [0.66, 0.95], [1, 0.85]);
+  const filter2 = useTransform(scrollYProgress, [0.66, 0.95], ["brightness(1)", "brightness(0.85)"]);
 
   // Card 3 (Slides up from 100vh to 0px between scroll 0.72 and 0.96)
   const rawY3 = useTransform(scrollYProgress, [0.72, 0.96], ["100vh", "0vh"]);
   const y3 = useSpring(rawY3, springConfig);
 
   const cardTransforms = [
-    { y: "0vh", scale: scale0, brightness: brightness0, zIndex: 10 },
-    { y: y1, scale: scale1, brightness: brightness1, zIndex: 20 },
-    { y: y2, scale: scale2, brightness: brightness2, zIndex: 30 },
-    { y: y3, scale: 1, brightness: 1, zIndex: 40 },
+    { y: "0vh", scale: scale0, filter: filter0, zIndex: 10 },
+    { y: y1, scale: scale1, filter: filter1, zIndex: 20 },
+    { y: y2, scale: scale2, filter: filter2, zIndex: 30 },
+    { y: y3, scale: 1, filter: "brightness(1)", zIndex: 40 },
   ];
 
   return (
     <section
       ref={containerRef}
-      id="philosophy"
+      id="awards"
       className="relative w-full h-[400vh] bg-transparent"
     >
       {/* Sticky Viewport Frame - locks in place while user scrolls through the 400vh container */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-4 md:px-8 max-w-5xl mx-auto overflow-hidden">
         
-        {/* Section Header with crisp white text */}
+        {/* Section Header with dynamic color interpolation from Verified Certifications dark tone into crisp white */}
         <div className="text-center mb-10 md:mb-14 shrink-0">
-          <div className="text-xs font-mono text-white/90 uppercase tracking-widest mb-3 font-semibold">
-            [ 03 / ENGINEERING PHILOSOPHY ]
+          <div className="text-xs font-mono text-amber-500 uppercase tracking-widest mb-3 font-bold flex items-center justify-center gap-1.5">
+            <Trophy className="w-3.5 h-3.5 text-amber-500" />
+            <span>[ 02 / HONORS & CHAMPIONSHIPS ]</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
-            Architectural Pillars & Principles
-          </h2>
-          <p className="text-white/80 text-xs sm:text-sm mt-2 max-w-xl mx-auto font-normal">
-            Gulir ke bawah — setiap kartu naik dan menumpuk secara berurutan di layar.
-          </p>
+          <motion.h2
+            style={{ color: titleColor }}
+            className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight transition-colors duration-200"
+          >
+            Competitive Hackathons & Championship Awards
+          </motion.h2>
+          <motion.p
+            style={{ color: subtitleColor }}
+            className="text-xs sm:text-sm mt-2 max-w-xl mx-auto font-normal transition-colors duration-200"
+          >
+            Gulir ke bawah &mdash; setiap trofi dan kemenangan kejuaraan naik menumpuk secara berurutan.
+          </motion.p>
         </div>
 
         {/* Stack Box where all cards overlap & rise onto each other */}
         <div className="relative w-full h-[420px] sm:h-[390px] md:h-[370px] max-w-4xl">
-          {cards.map((card, index) => {
+          {championshipCards.map((card, index) => {
             const tf = cardTransforms[index];
             return (
               <motion.div
                 key={card.number}
                 style={{
                   y: tf.y,
-                  scale: tf.scale as any,
-                  filter: typeof tf.brightness === "number" ? `brightness(${tf.brightness})` : useTransform(tf.brightness as MotionValue<number>, (b) => `brightness(${b})`),
+                  scale: tf.scale,
+                  filter: tf.filter,
                   zIndex: tf.zIndex,
                 }}
-                className="absolute inset-0 rounded-3xl p-6 sm:p-8 md:p-10 bg-[#141418] border border-zinc-800/90 shadow-[0_8px_32px_rgba(0,0,0,0.36)] flex flex-col justify-between select-none"
+                className="absolute inset-0 w-full rounded-3xl p-6 sm:p-8 bg-[#18181c] border border-amber-400/30 shadow-[0_8px_32px_rgba(0,0,0,0.36)] flex flex-col justify-between select-none"
               >
-                {/* Card Header */}
+                {/* Card Top: Number, Category & Rank Badge */}
                 <div>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center justify-between gap-4 mb-3">
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl sm:text-4xl font-mono font-extrabold text-white">
+                      <span className="text-2xl sm:text-3xl font-mono font-bold text-amber-400">
                         {card.number}
                       </span>
-                      <span className="text-xs font-mono px-3 py-0.5 rounded-full bg-zinc-800 text-zinc-300 font-medium">
+                      <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
                         {card.category}
                       </span>
                     </div>
 
-                    <div className="p-2 sm:p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-200 shrink-0 inline-flex items-center gap-2 w-fit">
-                      <Zap className="w-3.5 h-3.5 text-white" />
-                      <span>{card.stats}</span>
+                    <div className="px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-[11px] font-mono text-amber-300 font-bold">
+                      {card.badge}
                     </div>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight mb-1">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     {card.title}
                   </h3>
-                  <p className="text-xs sm:text-sm font-mono text-zinc-400 mb-3">
+                  <p className="text-xs sm:text-sm font-mono text-amber-200/90 mt-1">
                     {card.tagline}
                   </p>
-
-                  <p className="text-zinc-300 text-xs sm:text-sm md:text-base leading-relaxed line-clamp-3 md:line-clamp-none">
+                  
+                  <p className="text-xs sm:text-sm text-zinc-300 mt-3 leading-relaxed">
                     {card.description}
                   </p>
                 </div>
 
-                {/* Bullets */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-4 border-t border-zinc-800/80 mt-auto">
-                  {card.bullets.map((b, i) => (
-                    <div key={i} className="flex items-start gap-2 text-[11px] sm:text-xs text-zinc-400">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                      <span className="line-clamp-2">{b}</span>
-                    </div>
-                  ))}
+                {/* Card Bottom: Bullets & Stat Highlight */}
+                <div className="pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-zinc-400">
+                    {card.bullets.slice(0, 2).map((bullet, i) => (
+                      <span key={i} className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span className="text-zinc-300">{bullet}</span>
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="px-3 py-1 rounded-xl bg-zinc-800/80 border border-zinc-700/60 text-right shrink-0">
+                    <span className="text-xs font-mono font-semibold text-emerald-400">
+                      {card.stats}
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             );

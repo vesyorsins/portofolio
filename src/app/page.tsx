@@ -58,11 +58,11 @@ export default function Home() {
       {/* 3D Isometric Multi-Row Certificate Stream */}
       <ParallaxShowcase />
 
+      {/* Sticky Stacking Cards on Scroll (Awards & Championships) */}
+      <StickyCardStack />
+
       {/* Operating Across Four Disciplines (Interactive Assembly & Real Audio Player) */}
       <DeviceShowcaseScroll />
-
-      {/* Sticky Stacking Cards on Scroll (Engineering Philosophy) */}
-      <StickyCardStack />
 
       {/* Stack & Skills Matrix with Scroll Offsets */}
       <SkillsMatrix />
