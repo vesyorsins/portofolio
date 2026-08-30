@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowUpRight, Copy, Check, Mail, Terminal } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/Icons";
-import HeroProfileCard from "@/components/HeroProfileCard";
+import { GithubIcon, LinkedinIcon } from "@/components/ui/Icons";
+import HeroProfileCard from "@/components/ui/HeroProfileCard";
 
 interface HeroProps {
   onOpenTerminal?: () => void;

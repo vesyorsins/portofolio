@@ -2,21 +2,22 @@
 
 import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import StatsMarquee from "@/components/StatsMarquee";
-import ScrollVelocityMarquee from "@/components/ScrollVelocityMarquee";
-import ManifestoSection from "@/components/ManifestoSection";
-import ParallaxShowcase from "@/components/ParallaxShowcase";
-import StickyCardStack from "@/components/StickyCardStack";
-import ProjectShowcase from "@/components/ProjectShowcase";
-import SkillsMatrix from "@/components/SkillsMatrix";
-import ExperienceTimeline from "@/components/ExperienceTimeline";
-import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
-import TerminalWidget from "@/components/TerminalWidget";
-import AmbientRainEffect from "@/components/AmbientRainEffect";
-import AmbientFogEffect from "@/components/AmbientFogEffect";
+import Navbar from "@/components/ui/Navbar";
+import TerminalWidget from "@/components/ui/TerminalWidget";
+import AmbientRainEffect from "@/components/ui/AmbientRainEffect";
+import AmbientFogEffect from "@/components/ui/AmbientFogEffect";
+
+import Hero from "@/components/sections/Hero";
+import StatsMarquee from "@/components/sections/StatsMarquee";
+import ScrollVelocityMarquee from "@/components/sections/ScrollVelocityMarquee";
+import ManifestoSection from "@/components/sections/ManifestoSection";
+import ParallaxShowcase from "@/components/sections/ParallaxShowcase";
+import StickyCardStack from "@/components/sections/StickyCardStack";
+import ProjectShowcase from "@/components/sections/ProjectShowcase";
+import SkillsMatrix from "@/components/sections/SkillsMatrix";
+import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
+import ContactSection from "@/components/sections/ContactSection";
+import Footer from "@/components/sections/Footer";
 
 export default function Home() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);

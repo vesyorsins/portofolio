@@ -4,7 +4,6 @@ import React, { useState, useRef } from "react";
 import {
   motion,
   AnimatePresence,
-  useMotionValue,
   useSpring,
 } from "framer-motion";
 import {
@@ -21,244 +20,9 @@ import {
   Radio,
   Sliders,
 } from "lucide-react";
+import { ProjectItem } from "@/types/portfolio";
+import { projectsData } from "@/data/projects";
 
-interface ArchitectureNode {
-  name: string;
-  type: string;
-  latency: string;
-}
-
-interface ProjectItem {
-  id: string;
-  serial: string;
-  title: string;
-  category: "Full-Stack Web" | "Cloud & DevOps" | "Cybersecurity" | "Machine Learning & AI";
-  role: string;
-  year: string;
-  tagline: string;
-  description: string;
-  metrics: string;
-  technologies: string[];
-  github?: string;
-  demo?: string;
-  featured: boolean;
-  telemetry: {
-    status: string;
-    rps: string;
-    p99: string;
-    pipeline: ArchitectureNode[];
-  };
-}
-
-const projectsData: ProjectItem[] = [
-  {
-    id: "sentinel-core",
-    serial: "// PROJ_01",
-    title: "SentinelCore Autonomous Telemetry Engine",
-    category: "Full-Stack Web",
-    role: "Lead Full-Stack Architect",
-    year: "2025",
-    tagline: "Sub-millisecond real-time telemetry streaming over distributed WebSockets",
-    description:
-      "Arsitektur web real-time berkinerja tinggi untuk agregasi telemetri cluster server skala besar. Menggunakan Next.js 16 App Router, TypeScript, dan WebSocket stream buffer dengan latensi rendering sub-10ms pada 60 FPS terkunci.",
-    metrics: "< 10ms Latency • 60 FPS Locked",
-    technologies: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "WebSockets", "Framer Motion"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    featured: true,
-    telemetry: {
-      status: "STREAMING // ACTIVE",
-      rps: "48,200 req/s",
-      p99: "7.8ms",
-      pipeline: [
-        { name: "Edge Ingestion", type: "WebSocket", latency: "1.2ms" },
-        { name: "Stream Buffer", type: "RingBuffer", latency: "2.1ms" },
-        { name: "React Canvas", type: "WebGL/RAF", latency: "4.5ms" },
-      ],
-    },
-  },
-  {
-    id: "neural-rag",
-    serial: "// PROJ_02",
-    title: "Aegis RAG: Enterprise Vector Retrieval Engine",
-    category: "Machine Learning & AI",
-    role: "AI & Systems Engineer",
-    year: "2025",
-    tagline: "Sub-second multi-modal vector search with cross-encoder re-ranking",
-    description:
-      "Pipeline RAG (Retrieval-Augmented Generation) berbasis Pinecone HNSW indexing dan model quantized LLaMA-3. Mampu memproses pencarian semantik melintasi 1.2M dokumen korporat dengan reranking BM25 dan latensi TTFT 180ms.",
-    metrics: "180ms TTFT • 1.2M Vectors Index",
-    technologies: ["PyTorch", "FastAPI", "Pinecone", "LLaMA-3", "LangChain", "Hugging Face"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    featured: true,
-    telemetry: {
-      status: "INFERENCE // READY",
-      rps: "1,450 qps",
-      p99: "182ms",
-      pipeline: [
-        { name: "Semantic Embedding", type: "BGE-Large", latency: "34ms" },
-        { name: "HNSW Dense Search", type: "Pinecone", latency: "42ms" },
-        { name: "LLM Cross-Rerank", type: "LLaMA-3-8B", latency: "106ms" },
-      ],
-    },
-  },
-  {
-    id: "k8s-mesh",
-    serial: "// PROJ_03",
-    title: "AeroMesh: Multi-Region Kubernetes Orchestrator",
-    category: "Cloud & DevOps",
-    role: "DevOps & Cloud Architect",
-    year: "2024",
-    tagline: "Automated blue/green zero-downtime cluster deployment with Terraform IaC",
-    description:
-      "Infrastruktur cloud terdistribusi multi-region di AWS yang dikelola penuh melalui Terraform dan Helm Charts. Dilengkapi sistem automated failover, autoscaling pod dinamis, dan continuous chaos simulation dengan SLA 99.999%.",
-    metrics: "99.999% SLA • Zero-Downtime Canary",
-    technologies: ["Kubernetes", "Docker", "Terraform", "GitHub Actions", "AWS", "Helm", "Prometheus"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    featured: true,
-    telemetry: {
-      status: "CLUSTER // HEALTHY",
-      rps: "120,000 req/s",
-      p99: "4.2ms",
-      pipeline: [
-        { name: "Global Anycast", type: "AWS Route53", latency: "0.8ms" },
-        { name: "Envoy Ingress", type: "K8s Mesh", latency: "1.4ms" },
-        { name: "Pod Replicas", type: "Autoscaled", latency: "2.0ms" },
-      ],
-    },
-  },
-  {
-    id: "vulnerability-probe",
-    serial: "// PROJ_04",
-    title: "Cerberus: Automated Threat Reconnaissance Platform",
-    category: "Cybersecurity",
-    role: "Security Engineer / Pentester",
-    year: "2024",
-    tagline: "OWASP Top 10 payload scanner & network packet attack surface mapper",
-    description:
-      "Platform audit keamanan aplikasi web dan pemetaan celah serangan jaringan otomatis. Mengotomatisasi verifikasi header keamanan (CSP, CORS, HSTS), fuzzing payload WAF, serta audit otentikasi JWT secara real-time.",
-    metrics: "0 False Positives • 100+ Vectors",
-    technologies: ["Python", "Nmap", "Wireshark", "Burp Suite API", "Linux", "FastAPI"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    featured: true,
-    telemetry: {
-      status: "PROBE // AUDITING",
-      rps: "3,800 probes/s",
-      p99: "12.4ms",
-      pipeline: [
-        { name: "Packet Intercept", type: "RawSocket", latency: "1.1ms" },
-        { name: "WAF Fuzz Engine", type: "RegEx Sandbox", latency: "5.3ms" },
-        { name: "Signature Audit", type: "OWASP Engine", latency: "6.0ms" },
-      ],
-    },
-  },
-  {
-    id: "audio-synth-ui",
-    serial: "// PROJ_05",
-    title: "Vortex: Interactive Web Audio Synthesizer Studio",
-    category: "Full-Stack Web",
-    role: "Frontend Engineer",
-    year: "2024",
-    tagline: "In-browser sound synthesis & real-time Fast Fourier Transform visualiser",
-    description:
-      "Studio pemrosesan audio berbasis Web Audio API dan AnalyserNode. Menghadirkan simulasi osilator frekuensi suara, filter biquad dinamis, dan visualisasi spectrum wave 60 FPS reaktif tanpa dependensi eksternal.",
-    metrics: "Zero Latency • 60 FPS FFT Audio",
-    technologies: ["React", "TypeScript", "Web Audio API", "Canvas API", "Tailwind CSS"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    featured: false,
-    telemetry: {
-      status: "AUDIO CONTEXT // RUNNING",
-      rps: "44.1 kHz PCM",
-      p99: "0.4ms",
-      pipeline: [
-        { name: "Oscillator Node", type: "Sine/Saw/Square", latency: "0.1ms" },
-        { name: "Biquad Filter", type: "LowPass/Resonance", latency: "0.1ms" },
-        { name: "FFT Analyser", type: "2048 Bins Canvas", latency: "0.2ms" },
-      ],
-    },
-  },
-  {
-    id: "distributed-cache",
-    serial: "// PROJ_06",
-    title: "HyperSync: High-Throughput Distributed Cache Mesh",
-    category: "Cloud & DevOps",
-    role: "Backend & Systems Engineer",
-    year: "2024",
-    tagline: "Sub-5ms multi-tier key-value store with raft consensus replication",
-    description:
-      "Sistem caching terdistribusi in-memory dengan replikasi konsensus Raft, kompresi Zstandard real-time, dan invalidasi cache otomatis untuk beban traffic hingga 80.000 request per detik.",
-    metrics: "80k req/sec • Sub-5ms Query",
-    technologies: ["Go", "Redis", "gRPC", "Docker", "Grafana", "Linux"],
-    github: "https://github.com",
-    featured: false,
-    telemetry: {
-      status: "SYNC // REPLICATING",
-      rps: "82,400 ops/s",
-      p99: "2.3ms",
-      pipeline: [
-        { name: "gRPC Transport", type: "HTTP/2 Stream", latency: "0.6ms" },
-        { name: "Raft Consensus", type: "Leader Election", latency: "1.1ms" },
-        { name: "In-Memory Store", type: "Lockless SkipList", latency: "0.6ms" },
-      ],
-    },
-  },
-  {
-    id: "zero-trust-gateway",
-    serial: "// PROJ_07",
-    title: "Bastion: Zero-Trust API Security Proxy",
-    category: "Cybersecurity",
-    role: "Security Architect",
-    year: "2024",
-    tagline: "Reverse-proxy payload sanitization with cryptographic token rotation",
-    description:
-      "Reverse proxy gateway berkinerja tinggi yang memeriksa setiap payload request masuk, memitigasi serangan SQLi/XSS melalui regex engine terisolasi, dan memvalidasi rotasi kunci publik ED25519.",
-    metrics: "AES-256-GCM • Sub-8ms Overhead",
-    technologies: ["Rust", "Reverse Proxy", "JWT ED25519", "Linux eBPF", "Docker"],
-    github: "https://github.com",
-    featured: false,
-    telemetry: {
-      status: "GATEWAY // ENFORCING",
-      rps: "65,000 req/s",
-      p99: "4.8ms",
-      pipeline: [
-        { name: "eBPF Packet Filter", type: "Kernel XDP", latency: "0.3ms" },
-        { name: "ED25519 Token Verify", type: "Crypto Core", latency: "2.1ms" },
-        { name: "Payload Sanitizer", type: "Rust SIMD", latency: "2.4ms" },
-      ],
-    },
-  },
-  {
-    id: "fine-tuned-code-llm",
-    serial: "// PROJ_08",
-    title: "SyntaxMind: Specialized Code Refactoring LLM",
-    category: "Machine Learning & AI",
-    role: "Machine Learning Engineer",
-    year: "2023",
-    tagline: "LoRA quantized model producing automated architectural type migrations",
-    description:
-      "Model kecerdasan buatan teroptimasi 4-bit GGUF yang dilatih secara khusus untuk analisis keamanan kode, deteksi anti-pattern, dan migrasi otomatis kode warisan ke TypeScript modern yang aman dari celah memori.",
-    metrics: "142 tokens/sec • 4-Bit GGUF",
-    technologies: ["PyTorch", "Hugging Face", "LoRA", "FastAPI", "Python"],
-    github: "https://github.com",
-    featured: false,
-    telemetry: {
-      status: "INFERENCE // ACCELERATED",
-      rps: "142 tok/s",
-      p99: "210ms",
-      pipeline: [
-        { name: "Context Tokenizer", type: "Byte-Pair Engine", latency: "8ms" },
-        { name: "4-bit GGUF Core", type: "CUDA Kernels", latency: "185ms" },
-        { name: "AST Validator", type: "TypeScript Compiler", latency: "17ms" },
-      ],
-    },
-  },
-];
-
-// Individual High-Performance Interactive Project Card with Solid Matte Styling & Crisp 3D Physics
 function ProjectCardItem({
   project,
   index,
@@ -515,6 +279,10 @@ export default function ProjectShowcase() {
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
+          <div className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-2 font-bold flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-zinc-300" />
+            <span>[ 03 / FEATURED ARCHITECTURE & CODE ]</span>
+          </div>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight">
             Selected Engineering Works
           </h2>

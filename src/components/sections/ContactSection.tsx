@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Copy, Check, Mail, ArrowUpRight, Send, CheckCircle2 } from "lucide-react";
-import { GithubIcon, LinkedinIcon, TwitterIcon, DiscordIcon } from "@/components/Icons";
+import { socials } from "@/data/navigation";
 
 export default function ContactSection() {
   const [copied, setCopied] = useState(false);
@@ -41,33 +41,6 @@ export default function ContactSection() {
       setTimeout(() => setSentSuccess(false), 4000);
     }, 1000);
   };
-
-  const socials = [
-    {
-      name: "GitHub",
-      handle: "@vesyorsins",
-      url: "https://github.com",
-      icon: GithubIcon,
-    },
-    {
-      name: "LinkedIn",
-      handle: "in/vesyorsins",
-      url: "https://linkedin.com",
-      icon: LinkedinIcon,
-    },
-    {
-      name: "Twitter / X",
-      handle: "@vesyorsins",
-      url: "https://twitter.com",
-      icon: TwitterIcon,
-    },
-    {
-      name: "Discord",
-      handle: "vesyorsins#0001",
-      url: "https://discord.com",
-      icon: DiscordIcon,
-    },
-  ];
 
   return (
     <section

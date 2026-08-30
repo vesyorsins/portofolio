@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, Menu, X, ArrowUpRight } from "lucide-react";
+import { navLinks } from "@/data/navigation";
 
 interface NavbarProps {
   onOpenTerminal?: () => void;
@@ -37,15 +38,6 @@ export default function Navbar({ onOpenTerminal }: NavbarProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const navLinks = [
-    { name: "Overview", href: "#hero", id: "hero" },
-    { name: "Awards", href: "#awards", id: "awards" },
-    { name: "Projects", href: "#projects", id: "projects" },
-    { name: "Stack", href: "#skills", id: "skills" },
-    { name: "Experience", href: "#experience", id: "experience" },
-    { name: "Contact", href: "#contact", id: "contact" },
-  ];
 
   const scrollTo = (href: string) => {
     setMobileMenuOpen(false);

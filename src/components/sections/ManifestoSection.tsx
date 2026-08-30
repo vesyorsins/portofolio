@@ -1,6 +1,4 @@
-"use client";
-
-import ScrollRevealText from "@/components/ScrollRevealText";
+import ScrollRevealText from "@/components/ui/ScrollRevealText";
 
 export default function ManifestoSection() {
   return (
