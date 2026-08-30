@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 interface FogParticle {
   x: number;
@@ -17,10 +17,33 @@ interface FogParticle {
 
 export default function AmbientFogEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { scrollY } = useScroll();
+  const [fogOpacity, setFogOpacity] = useState<number>(0);
 
-  // Fog gently builds up and peaks at the bottom deep-dark realm based strictly on scroll distance
-  const fogOpacity = useTransform(scrollY, [6000, 8000], [0, 0.9]);
+  // Dynamic Scroll Listener: Accurately triggers fog ONLY when the user reaches #experience (Professional Experience)
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = document.getElementById("experience");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // When #experience enters viewport
+      if (rect.top > windowHeight * 0.8) {
+        setFogOpacity(0);
+      } else {
+        // Smoothly ramps up opacity as user scrolls through Experience Timeline and downward
+        const progress = Math.min(
+          Math.max((windowHeight * 0.8 - rect.top) / (windowHeight * 0.6), 0),
+          1
+        );
+        setFogOpacity(progress * 0.85);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -104,7 +127,8 @@ export default function AmbientFogEffect() {
   return (
     <motion.canvas
       ref={canvasRef}
-      style={{ opacity: fogOpacity }}
+      animate={{ opacity: fogOpacity }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       className="fixed inset-0 pointer-events-none z-[1] w-full h-full mix-blend-screen"
     />
   );

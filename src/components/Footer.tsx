@@ -28,12 +28,12 @@ export default function Footer({ onOpenTerminal }: { onOpenTerminal?: () => void
   };
 
   return (
-    <footer className="w-full border-t border-zinc-800 bg-transparent py-8 px-4 md:px-8 text-xs font-mono text-zinc-500">
+    <footer className="w-full border-t border-zinc-800 bg-transparent py-8 px-4 md:px-8 text-xs font-mono text-zinc-500 select-none">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         
         {/* Left: Brand & Copyright */}
         <div className="flex items-center gap-2">
-          <span className="text-zinc-300 font-semibold">VESYORSINS</span>
+          <span className="text-zinc-300 font-semibold tracking-wider">VESYORSINS</span>
           <span>© {new Date().getFullYear()} • ALL RIGHTS RESERVED</span>
         </div>
 
@@ -54,7 +54,6 @@ export default function Footer({ onOpenTerminal }: { onOpenTerminal?: () => void
               onClick={onOpenTerminal}
               className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors cursor-pointer"
               title="Launch Terminal"
-              data-cursor-interactive
             >
               <Terminal className="w-3.5 h-3.5" />
               <span>TERMINAL</span>
@@ -64,8 +63,6 @@ export default function Footer({ onOpenTerminal }: { onOpenTerminal?: () => void
           <button
             onClick={scrollToTop}
             className="flex items-center gap-1 px-3 py-1 rounded bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors border border-zinc-800 cursor-pointer shadow-sm"
-            data-cursor-interactive
-            data-cursor-text="TOP"
           >
             <span>TOP</span>
             <ArrowUp className="w-3 h-3" />

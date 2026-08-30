@@ -160,15 +160,6 @@ export default function SkillsMatrix() {
                   ))}
                 </div>
               </div>
-
-              {/* Footer tag */}
-              <div className="mt-6 pt-4 border-t border-zinc-800/80 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  VERIFIED IN PRODUCTION
-                </span>
-                <span>{category.skills.length} CORE CAPABILITIES</span>
-              </div>
             </motion.div>
           );
         })}

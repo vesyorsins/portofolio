@@ -132,10 +132,6 @@ export default function StickyCardStack() {
         
         {/* Section Header with dynamic color interpolation from Verified Certifications dark tone into crisp white */}
         <div className="text-center mb-10 md:mb-14 shrink-0">
-          <div className="text-xs font-mono text-amber-500 uppercase tracking-widest mb-3 font-bold flex items-center justify-center gap-1.5">
-            <Trophy className="w-3.5 h-3.5 text-amber-500" />
-            <span>[ 02 / HONORS & CHAMPIONSHIPS ]</span>
-          </div>
           <motion.h2
             style={{ color: titleColor }}
             className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight transition-colors duration-200"
@@ -163,7 +159,7 @@ export default function StickyCardStack() {
                   filter: tf.filter,
                   zIndex: tf.zIndex,
                 }}
-                className="absolute inset-0 w-full rounded-3xl p-6 sm:p-8 bg-[#18181c] border border-amber-400/30 shadow-[0_8px_32px_rgba(0,0,0,0.36)] flex flex-col justify-between select-none"
+                className="absolute inset-0 w-full rounded-3xl p-6 sm:p-8 bg-[#141418] border border-zinc-800 flex flex-col justify-between select-none shadow-none"
               >
                 {/* Card Top: Number, Category & Rank Badge */}
                 <div>
@@ -177,7 +173,7 @@ export default function StickyCardStack() {
                       </span>
                     </div>
 
-                    <div className="px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-[11px] font-mono text-amber-300 font-bold">
+                    <div className="px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] font-mono text-amber-400 font-bold">
                       {card.badge}
                     </div>
                   </div>
@@ -185,7 +181,7 @@ export default function StickyCardStack() {
                   <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     {card.title}
                   </h3>
-                  <p className="text-xs sm:text-sm font-mono text-amber-200/90 mt-1">
+                  <p className="text-xs sm:text-sm font-mono text-zinc-300 mt-1">
                     {card.tagline}
                   </p>
                   

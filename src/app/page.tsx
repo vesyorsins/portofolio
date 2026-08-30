@@ -17,14 +17,13 @@ import Footer from "@/components/Footer";
 import TerminalWidget from "@/components/TerminalWidget";
 import AmbientRainEffect from "@/components/AmbientRainEffect";
 import AmbientFogEffect from "@/components/AmbientFogEffect";
-import FloatingMusicPlayer from "@/components/FloatingMusicPlayer";
 
 export default function Home() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const { scrollY } = useScroll();
 
   // Full-width continuous smooth background transition from Top Cream to Bottom Obsidian
-  // Stays light throughout Hero, Marquee, Manifesto, and Verified Certifications, then darkens AFTER certificates
+  // Stays light throughout Hero, Marquee, Manifesto, and Verified Certifications, then darkens AFTER certificates to deep obsidian
   const backgroundColor = useTransform(
     scrollY,
     [0, 2400, 3800, 5200, 6800],
@@ -83,9 +82,6 @@ export default function Home() {
         isOpen={isTerminalOpen}
         onClose={() => setIsTerminalOpen(false)}
       />
-
-      {/* Persistent Floating Vinyl Music Player (Eleanor Whisper - Lalu Biru) */}
-      <FloatingMusicPlayer />
     </motion.main>
   );
 }
