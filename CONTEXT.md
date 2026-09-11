@@ -6,7 +6,7 @@
 
 ## 📌 Ringkasan Proyek
 
-Portofolio web berkinerja tinggi (High-Performance Engineering & Creative Portfolio) untuk **Vesyorsins** (Creative Technologist & Lead Software / AI Engineer). Memadukan estetika cyber-minimalist / technical HUD, kinetic typography, efek canvas ambient, kartu interaktif 3D tilt, smooth scrolling, terminal interaktif, dan integrasi headless CMS (Sanity.io) dengan sistem *graceful fallback* ke data statis.
+Portofolio web berkinerja tinggi (High-Performance Engineering & Creative Portfolio) untuk **Vesyorsins** (Creative Technologist & Lead Software / AI Engineer). Memadukan estetika cyber-minimalist / technical HUD, kinetic typography, efek canvas ambient, kartu interaktif 3D tilt, smooth scrolling, dan integrasi headless CMS (Sanity.io) dengan sistem *graceful fallback* ke data statis.
 
 ---
 
@@ -53,7 +53,7 @@ portofolio/
     │           ├── layout.tsx  # Layout khusus studio (viewport metadata)
     │           └── page.tsx    # NextStudio client component wrapper
     ├── components/
-    │   ├── PortfolioApp.tsx    # Client orchestrator utama: scroll background transition & terminal modal
+    │   ├── PortfolioApp.tsx    # Client orchestrator utama: scroll background transition
     │   ├── sections/           # Komponen section modular:
     │   │   ├── Hero.tsx                 # Hero section: rotating roles, CTA, 3D Profile Card
     │   │   ├── StatsMarquee.tsx         # HUD metric counters
@@ -61,27 +61,24 @@ portofolio/
     │   │   ├── ManifestoSection.tsx     # Word-by-word scroll reveal manifesto
     │   │   ├── ParallaxShowcase.tsx     # 3D isometric certificate ticker stream
     │   │   ├── StickyCardStack.tsx      # Stacking cards scroll untuk penghargaan
-    │   │   ├── ProjectShowcase.tsx      # Telemetry architecture & project showcase
     │   │   ├── SkillsMatrix.tsx         # Matrix keahlian teknis & tags
     │   │   ├── ExperienceTimeline.tsx   # Garis waktu karier dengan laser indicator
     │   │   ├── ContactSection.tsx       # Transmisi email & status ketersediaan
-    │   │   └── Footer.tsx               # Minimalist HUD footer & terminal launcher
+    │   │   └── Footer.tsx               # Minimalist HUD footer
     │   └── ui/                 # Komponen UI atomik & effects:
     │       ├── AmbientFogEffect.tsx     # Canvas 2D mist/fog volumetrik
     │       ├── AmbientRainEffect.tsx    # Canvas 2D tetesan air / rain stream
     │       ├── CustomCursor.tsx         # Magnetic custom cursor (dinonaktifkan pada touch device & /studio)
     │       ├── HeroProfileCard.tsx      # 3D holographic tilt, gyro effect, flip gesture card
     │       ├── Icons.tsx                # SVG Icon kustom (Github, Linkedin, dsb.)
-    │       ├── Navbar.tsx               # Floating glassmorphism navbar + terminal toggle
+    │       ├── Navbar.tsx               # Floating glassmorphism navbar
     │       ├── ScrollRevealText.tsx     # Reusable text opacity reveal on scroll
-    │       ├── SmoothScroll.tsx         # Lenis smooth scroll provider
-    │       └── TerminalWidget.tsx       # Cyberpunk CLI terminal modal interaktif
+    │       └── SmoothScroll.tsx         # Lenis smooth scroll provider
     ├── data/                   # Fallback data lokal jika Sanity CMS belum terkonfigurasi:
     │   ├── awards.ts
     │   ├── certifications.ts
     │   ├── experience.ts
     │   ├── navigation.ts
-    │   ├── projects.ts
     │   ├── siteSettings.ts
     │   └── skills.ts
     ├── lib/
@@ -94,7 +91,6 @@ portofolio/
     │   └── schemas/            # Definisi skema Sanity Studio:
     │       ├── index.ts        # Daftar registrasi tipe skema
     │       ├── siteSettings.ts
-    │       ├── project.ts
     │       ├── award.ts
     │       ├── certificate.ts
     │       ├── experience.ts
@@ -139,12 +135,16 @@ portofolio/
 
 ### 4. Aturan Animasi & Interaksi
 - **Framer Motion**: Gunakan transisi berbasis fisika spring: `{ stiffness: 180, damping: 25 }`.
-- **Device Awareness**:
+- **Device Awareness & Mobile Performance**:
   - `CustomCursor.tsx`: Hanya aktif pada desktop/mouse pointer (`window.matchMedia("(pointer: coarse)").matches`).
+  - `SmoothScroll.tsx`: Hanya aktif pada non-touch/desktop (`!window.matchMedia("(pointer: coarse)").matches && window.innerWidth >= 768`). Pada perangkat mobile/touch, gunakan scrolling momentum bawaan (native 120Hz compositor) agar zero-lag.
+  - `useInView`: Komponen animasi berulang (`useAnimationFrame`, marquee loop) seperti `ParallaxShowcase`, `ScrollVelocityMarquee`, dan `StatsMarquee` wajib menggunakan `useInView` agar perhitungan dijeda saat di luar viewport.
+  - **Canvas & Gradients**: Hindari alokasi radial/linear gradient di dalam render loop frame. Gunakan offscreen canvas caching (`drawImage`) dan kurangi densitas partikel pada layar mobile.
+  - **GPU Layer Efficiency**: Hindari menaruh `will-change-transform transform-gpu` pada puluhan elemen anak sekaligus; letakkan hanya pada kontainer induk yang bergerak.
   - Rute Studio (`/studio`): Selalu bypass / nonaktifkan Lenis smooth scroll dan Custom Cursor agar tidak mengganggu UI Sanity Studio.
 
 ### 5. Konvensi Penamaan (Naming Conventions)
-- **Komponen**: `PascalCase` (contoh: `HeroProfileCard.tsx`, `TerminalWidget.tsx`).
+- **Komponen**: `PascalCase` (contoh: `HeroProfileCard.tsx`, `StatsMarquee.tsx`).
 - **File Helper, Data & Query**: `camelCase` (contoh: `dataProvider.ts`, `siteSettings.ts`, `queries.ts`).
 - **Skrip CLI**: `kebab-case` (contoh: `seed-sanity.ts`).
 - **Environment Variables**: `UPPER_SNAKE_CASE` (contoh: `NEXT_PUBLIC_SANITY_PROJECT_ID`, `SANITY_API_TOKEN`).

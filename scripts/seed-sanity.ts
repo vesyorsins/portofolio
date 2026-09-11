@@ -8,7 +8,6 @@
 
 import { createClient } from "@sanity/client";
 import { defaultSiteSettings } from "../src/data/siteSettings";
-import { projectsData } from "../src/data/projects";
 import { championshipCards } from "../src/data/awards";
 import { row1Certificates, row2Certificates, row3Certificates } from "../src/data/certifications";
 import { experiences } from "../src/data/experience";
@@ -68,33 +67,7 @@ async function seed() {
   });
   console.log("✅ Seeded site & hero settings.");
 
-  // 1. Seed Projects
-  console.log("📦 Seeding projects...");
-  for (let i = 0; i < projectsData.length; i++) {
-    const p = projectsData[i];
-    await client.createOrReplace({
-      _id: `project-${p.id}`,
-      _type: "project",
-      id: p.id,
-      serial: p.serial,
-      title: p.title,
-      category: p.category,
-      role: p.role,
-      year: p.year,
-      tagline: p.tagline,
-      description: p.description,
-      metrics: p.metrics,
-      technologies: p.technologies,
-      github: p.github,
-      demo: p.demo,
-      featured: p.featured,
-      order: i + 1,
-      telemetry: p.telemetry,
-    });
-  }
-  console.log(`✅ Seeded ${projectsData.length} projects.`);
-
-  // 2. Seed Awards
+  // 1. Seed Awards
   console.log("🏆 Seeding awards & championships...");
   for (let i = 0; i < championshipCards.length; i++) {
     const a = championshipCards[i];

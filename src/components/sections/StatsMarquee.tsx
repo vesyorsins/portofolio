@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { Zap } from "lucide-react";
 import { StatMetric } from "@/types/portfolio";
 import { defaultSiteSettings } from "@/data/siteSettings";
@@ -16,6 +16,8 @@ export default function StatsMarquee({
   telemetryOverview = defaultSiteSettings.marqueeLine1,
 }: StatsMarqueeProps) {
   const containerRef = useRef<HTMLElement>(null);
+  const isInView = useInView(containerRef, { margin: "100px 0px" });
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -91,7 +93,7 @@ export default function StatsMarquee({
       {/* Infinite Horizontal Marquee */}
       <div className="relative w-full flex overflow-x-hidden select-none pt-2">
         <motion.div
-          animate={{ x: ["0%", "-50%"] }}
+          animate={isInView ? { x: ["0%", "-50%"] } : false}
           transition={{
             repeat: Infinity,
             ease: "linear",

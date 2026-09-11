@@ -28,10 +28,10 @@ export default function ExperienceTimeline({ milestones = experiences }: { miles
       {/* Section Header */}
       <div className="text-left mb-16">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
-          Professional Experience
+          My Experience
         </h2>
         <p className="text-zinc-400 text-sm md:text-base mt-2 max-w-xl font-normal leading-relaxed">
-          Rekam jejak profesional dalam merancang dan mengeksekusi sistem digital berkinerja tinggi.
+          A proven track record of experience in handling various jobs and responsibilities.
         </p>
       </div>
 
@@ -119,7 +119,7 @@ export default function ExperienceTimeline({ milestones = experiences }: { miles
             <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
           </div>
           <span className="text-[11px] font-mono text-zinc-400">
-            {"// CAREER TIMELINE GENESIS"}
+            {"// EXPERIENCE TIMELINE GENESIS"}
           </span>
         </div>
       </div>

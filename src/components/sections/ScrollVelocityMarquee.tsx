@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import {
   motion,
   useScroll,
@@ -9,6 +9,7 @@ import {
   useVelocity,
   useAnimationFrame,
   useMotionValue,
+  useInView,
 } from "framer-motion";
 import { defaultSiteSettings } from "@/data/siteSettings";
 
@@ -16,6 +17,7 @@ interface VelocityTextProps {
   children: string;
   baseVelocity?: number;
   className?: string;
+  isInView?: boolean;
 }
 
 function wrap(min: number, max: number, v: number) {
@@ -23,7 +25,12 @@ function wrap(min: number, max: number, v: number) {
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
 }
 
-export function VelocityText({ children, baseVelocity = 3, className = "" }: VelocityTextProps) {
+export function VelocityText({
+  children,
+  baseVelocity = 3,
+  className = "",
+  isInView = true,
+}: VelocityTextProps) {
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -36,6 +43,9 @@ export function VelocityText({ children, baseVelocity = 3, className = "" }: Vel
   const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
 
   useAnimationFrame((_, delta) => {
+    // Only animate when visible on screen
+    if (!isInView) return;
+
     // Cap delta at 32ms to prevent huge jumps on tab switch or frame drop
     const clampedDelta = Math.min(delta, 32);
     let moveBy = baseVelocity * (clampedDelta / 1000) * 1.5;
@@ -72,12 +82,26 @@ export default function ScrollVelocityMarquee({
   line1?: string;
   line2?: string;
 }) {
+  const containerRef = useRef<HTMLElement>(null);
+  const isInView = useInView(containerRef, { margin: "100px 0px" });
+
   return (
-    <section className="w-full py-16 bg-transparent overflow-hidden border-y border-stone-300/30">
-      <VelocityText baseVelocity={-2} className="text-stone-400 hover:text-stone-700 transition-colors">
+    <section
+      ref={containerRef}
+      className="w-full py-16 bg-transparent overflow-hidden border-y border-stone-300/30"
+    >
+      <VelocityText
+        baseVelocity={-2}
+        className="text-stone-400 hover:text-stone-700 transition-colors"
+        isInView={isInView}
+      >
         {line1}
       </VelocityText>
-      <VelocityText baseVelocity={2} className="text-stone-300 hover:text-stone-600 transition-colors mt-2">
+      <VelocityText
+        baseVelocity={2}
+        className="text-stone-300 hover:text-stone-600 transition-colors mt-2"
+        isInView={isInView}
+      >
         {line2}
       </VelocityText>
     </section>

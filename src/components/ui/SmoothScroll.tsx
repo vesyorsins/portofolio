@@ -13,27 +13,51 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       return;
     }
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
+    let lenis: Lenis | null = null;
+    let animFrame: number | null = null;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    const checkAndInit = () => {
+      const isMobileOrTouch =
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.innerWidth < 768;
 
-    const animFrame = requestAnimationFrame(raf);
+      if (isMobileOrTouch) {
+        if (lenis) {
+          if (animFrame) cancelAnimationFrame(animFrame);
+          lenis.destroy();
+          lenis = null;
+          animFrame = null;
+        }
+        return;
+      }
+
+      if (!lenis) {
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          gestureOrientation: "vertical",
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          infinite: false,
+        });
+
+        function raf(time: number) {
+          lenis?.raf(time);
+          animFrame = requestAnimationFrame(raf);
+        }
+
+        animFrame = requestAnimationFrame(raf);
+      }
+    };
+
+    checkAndInit();
+    window.addEventListener("resize", checkAndInit);
 
     return () => {
-      cancelAnimationFrame(animFrame);
-      lenis.destroy();
+      window.removeEventListener("resize", checkAndInit);
+      if (animFrame) cancelAnimationFrame(animFrame);
+      if (lenis) lenis.destroy();
     };
   }, [pathname]);
 

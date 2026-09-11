@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUp, Terminal } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 
-export default function Footer({ onOpenTerminal }: { onOpenTerminal?: () => void }) {
+export default function Footer() {
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
@@ -49,17 +49,6 @@ export default function Footer({ onOpenTerminal }: { onOpenTerminal?: () => void
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3">
-          {onOpenTerminal && (
-            <button
-              onClick={onOpenTerminal}
-              className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors cursor-pointer"
-              title="Launch Terminal"
-            >
-              <Terminal className="w-3.5 h-3.5" />
-              <span>TERMINAL</span>
-            </button>
-          )}
-
           <button
             onClick={scrollToTop}
             className="flex items-center gap-1 px-3 py-1 rounded bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors border border-zinc-800 cursor-pointer shadow-sm"

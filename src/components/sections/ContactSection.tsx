@@ -172,7 +172,7 @@ export default function ContactSection({ email = defaultSiteSettings.directEmail
         </div>
 
         {/* Social Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {socials.map((s) => {
             const Icon = s.icon;
             return (

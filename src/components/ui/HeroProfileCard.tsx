@@ -198,7 +198,7 @@ export default function HeroProfileCard({
           rotateY: combinedRotateY,
           transformStyle: "preserve-3d",
         }}
-        className="relative w-full aspect-[4/5] cursor-pointer will-change-transform rounded-3xl"
+        className="relative w-full aspect-[4/5] cursor-pointer will-change-transform rounded-3xl touch-pan-y"
       >
         {/* ========================================================================= */}
         {/* FRONT FACE: 3D Holographic Portrait Photo Card (Visible at 0deg)           */}
@@ -221,11 +221,11 @@ export default function HeroProfileCard({
                 scale: isHovered ? 1.05 : 1,
               }}
               transition={{ duration: 0.4 }}
-              className="absolute inset-0 w-full h-full object-cover object-center filter grayscale contrast-[1.06] hover:grayscale-0 transition-all duration-700 select-none pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover object-center contrast-[1.02] transition-all duration-500 select-none pointer-events-none"
             />
 
             {/* Vignette Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none" />
 
             {/* Top Right Clean Sparkle Icon */}
             <div className="relative z-10 p-3 flex justify-end">

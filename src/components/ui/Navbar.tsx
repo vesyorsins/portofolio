@@ -2,40 +2,44 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { navLinks } from "@/data/navigation";
 
-interface NavbarProps {
-  onOpenTerminal?: () => void;
-}
-
-export default function Navbar({ onOpenTerminal }: NavbarProps) {
+export default function Navbar() {
   const [isDarkZone, setIsDarkZone] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      // Switch from light to dark nav styling around scrollY 600
-      setIsDarkZone(window.scrollY > 550);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Switch from light to dark nav styling around scrollY 550
+          setIsDarkZone(window.scrollY > 550);
 
-      const sections = ["hero", "awards", "projects", "skills", "experience", "contact"];
-      const scrollPosition = window.scrollY + 200;
+          const sections = ["hero", "awards", "skills", "experience", "contact"];
+          const scrollPosition = window.scrollY + 200;
 
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
+          for (const section of sections) {
+            const el = document.getElementById(section);
+            if (el) {
+              const top = el.offsetTop;
+              const height = el.offsetHeight;
+              if (scrollPosition >= top && scrollPosition < top + height) {
+                setActiveSection(section);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -98,22 +102,6 @@ export default function Navbar({ onOpenTerminal }: NavbarProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            {onOpenTerminal && (
-              <button
-                onClick={onOpenTerminal}
-                className={`hidden lg:flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-full transition-colors cursor-pointer border ${
-                  isDarkZone
-                    ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border-zinc-800"
-                    : "bg-[#f2efe9] hover:bg-[#eae6de] text-stone-700 border-[#e2dfd7]"
-                }`}
-                title="Open Terminal"
-                data-cursor-interactive
-              >
-                <Terminal className="w-3 h-3" />
-                <span>CLI</span>
-              </button>
-            )}
-
             <button
               onClick={() => scrollTo("#contact")}
               className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all flex items-center gap-1 cursor-pointer font-semibold shadow-sm ${
@@ -168,23 +156,6 @@ export default function Navbar({ onOpenTerminal }: NavbarProps) {
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
                 </button>
               ))}
-
-              {onOpenTerminal && (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenTerminal();
-                  }}
-                  className={`flex items-center gap-2 p-2.5 mt-2 rounded-xl text-xs font-mono border ${
-                    isDarkZone
-                      ? "bg-zinc-900 text-zinc-300 border-zinc-800"
-                      : "bg-[#f2efe9] text-stone-700 border-[#e2dfd7]"
-                  }`}
-                >
-                  <Terminal className="w-3.5 h-3.5" />
-                  <span>Launch CLI Terminal</span>
-                </button>
-              )}
             </div>
           </motion.div>
         )}

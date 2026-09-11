@@ -61,4 +61,19 @@ export const championshipCards: ChampionshipCard[] = [
       "Full WCAG/WAI-ARIA accessibility compliance",
     ],
   },
+  {
+    number: "05",
+    badge: "1ST RUNNER UP // GLOBAL HACKATHON 🥈",
+    title: "International Open Source AI Infrastructure Challenge",
+    category: "Distributed Systems & Machine Learning",
+    tagline: "High-performance GPU orchestration and model caching pipeline",
+    description:
+      "Merancang framework orkestrasi inferensi AI terdistribusi dengan penjadwalan beban dinamis, reduksi memori VRAM hingga 42%, dan throughput inferensi 3.2x lebih cepat dibanding baseline standar.",
+    stats: "2nd Place Winner • 140+ Global Teams • 3.2x Throughput",
+    bullets: [
+      "Dynamic model weights sharding across multi-node clusters",
+      "Low-latency streaming quantization with Triton server",
+      "Open-source contribution adopted by 1.2k+ developers",
+    ],
+  },
 ];

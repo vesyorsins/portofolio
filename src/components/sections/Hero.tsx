@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { ArrowUpRight, Copy, Check, Mail, Terminal } from "lucide-react";
+import { ArrowUpRight, Copy, Check, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/Icons";
 import HeroProfileCard from "@/components/ui/HeroProfileCard";
 import { SiteSettings } from "@/types/portfolio";
@@ -10,12 +10,10 @@ import { defaultSiteSettings } from "@/data/siteSettings";
 
 interface HeroProps {
   settings?: SiteSettings;
-  onOpenTerminal?: () => void;
 }
 
 export default function Hero({
   settings = defaultSiteSettings,
-  onOpenTerminal,
 }: HeroProps) {
   const [copied, setCopied] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
@@ -125,12 +123,12 @@ export default function Hero({
             className="flex flex-wrap items-center gap-3 mb-8"
           >
             <button
-              onClick={() => scrollTo("projects")}
+              onClick={() => scrollTo("awards")}
               className="px-5 py-2.5 rounded-xl bg-[#1c1917] hover:bg-[#292524] text-white text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
               data-cursor-interactive
               data-cursor-text="VIEW"
             >
-              <span>View Selected Works</span>
+              <span>View Awards & Honors</span>
               <ArrowUpRight className="w-4 h-4" />
             </button>
 
@@ -152,18 +150,6 @@ export default function Hero({
                 </>
               )}
             </button>
-
-            {onOpenTerminal && (
-              <button
-                onClick={onOpenTerminal}
-                className="px-3.5 py-2.5 rounded-xl bg-white/70 hover:bg-white border border-stone-300 text-stone-700 text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
-                title="Launch CLI"
-                data-cursor-interactive
-              >
-                <Terminal className="w-3.5 h-3.5 text-stone-600" />
-                <span>CLI</span>
-              </button>
-            )}
           </motion.div>
 
           {/* Responsive Social Links Pills */}

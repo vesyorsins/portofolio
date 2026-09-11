@@ -1,12 +1,10 @@
 import { defaultSiteSettings } from "@/data/siteSettings";
-import { projectsData } from "@/data/projects";
 import { championshipCards } from "@/data/awards";
 import { row1Certificates, row2Certificates, row3Certificates } from "@/data/certifications";
 import { experiences } from "@/data/experience";
 import { skillCategories } from "@/data/skills";
 import {
   fetchSiteSettings,
-  fetchProjects,
   fetchAwards,
   fetchCertificates,
   fetchExperiences,
@@ -15,7 +13,6 @@ import {
 import {
   SiteSettings,
   StatMetric,
-  ProjectItem,
   ChampionshipCard,
   ExperienceItem,
   SkillCategory,
@@ -63,14 +60,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     };
   }
   return defaultSiteSettings;
-}
-
-export async function getProjects(): Promise<ProjectItem[]> {
-  const cmsData = await fetchProjects();
-  if (cmsData && Array.isArray(cmsData) && cmsData.length > 0) {
-    return cmsData;
-  }
-  return projectsData;
 }
 
 export async function getAwards(): Promise<ChampionshipCard[]> {

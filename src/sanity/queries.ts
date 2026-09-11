@@ -30,28 +30,6 @@ const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   manifestoText
 }`;
 
-const projectsQuery = `*[_type == "project"] | order(order asc) {
-  "id": id,
-  serial,
-  title,
-  category,
-  role,
-  year,
-  tagline,
-  description,
-  metrics,
-  technologies,
-  github,
-  demo,
-  featured,
-  telemetry {
-    status,
-    rps,
-    p99,
-    pipeline[] { name, type, latency }
-  }
-}`;
-
 const awardsQuery = `*[_type == "award"] | order(order asc) {
   number,
   badge,
@@ -105,15 +83,6 @@ export async function fetchSiteSettings() {
       ...doc,
       avatarImage: uploadedAvatarUrl || doc.avatarImage,
     };
-  } catch {
-    return null;
-  }
-}
-
-export async function fetchProjects() {
-  if (!isSanityConfigured()) return null;
-  try {
-    return await sanityClient.fetch(projectsQuery);
   } catch {
     return null;
   }
