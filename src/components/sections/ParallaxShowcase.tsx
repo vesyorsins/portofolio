@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -26,28 +27,29 @@ function wrap(min: number, max: number, v: number) {
 function CertificatePhotoCard({ cert }: { cert: CertificatePhoto }) {
   return (
     <motion.div
-      whileHover={{ y: -8, scale: 1.02 }}
+      whileHover={{ y: -6, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="group/cert relative h-[220px] sm:h-[260px] w-[340px] sm:w-[420px] shrink-0 rounded-2xl p-2 bg-white/90 backdrop-blur-md border border-[#e6e3db] shadow-xl overflow-hidden flex flex-col justify-between select-none cursor-pointer"
+      className="group/cert relative h-[220px] sm:h-[260px] w-[340px] sm:w-[420px] shrink-0 rounded-2xl p-2 bg-[#fcfbf9] border border-stone-200/90 shadow-md hover:shadow-xl overflow-hidden flex flex-col justify-between select-none cursor-pointer will-change-transform transform-gpu transition-shadow duration-300"
     >
       {/* Clean Certificate Photo Frame */}
       <div className="relative w-full h-full rounded-xl overflow-hidden bg-stone-100">
-        <motion.img
+        <Image
           src={cert.image}
           alt={cert.title}
-          draggable={false}
-          className="w-full h-full object-cover object-center group-hover/cert:scale-105 transition-transform duration-500 pointer-events-none select-none"
+          fill
+          sizes="(max-width: 640px) 340px, 420px"
+          className="object-cover object-center group-hover/cert:scale-105 transition-transform duration-500 pointer-events-none select-none"
         />
 
         {/* Subtle Dark Vignette / Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
         {/* Bottom Title & Issuer Label */}
         <div className="absolute bottom-0 inset-x-0 p-4 z-10 text-white pointer-events-none">
           <span className="text-[11px] font-mono text-zinc-300 block mb-0.5">
             {cert.issuer}
           </span>
-          <h4 className="text-sm sm:text-base font-bold tracking-tight text-white leading-snug drop-shadow-md">
+          <h4 className="text-sm sm:text-base font-bold tracking-tight text-white leading-snug drop-shadow-sm">
             {cert.title}
           </h4>
         </div>
@@ -69,30 +71,31 @@ function InfiniteParallaxRow({
   const scrollVelocity = useVelocity(scrollY);
   const smoothVelocity = useSpring(scrollVelocity, {
     damping: 50,
-    stiffness: 400,
+    stiffness: 300,
   });
 
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 1.8], {
-    clamp: false,
-  });
-
-  // Seamless modulo wrap between -50% and 0%
-  const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
+  // Seamless modulo wrap between -33.3333% and 0%
+  const x = useTransform(baseX, (v) => `${wrap(-33.3333, 0, v)}%`);
 
   useAnimationFrame((_, delta) => {
     // Smooth, calm gliding speed (slows down further if hovered for effortless reading)
     const speedMultiplier = isHovered ? 0.3 : 1;
-    let moveBy = baseVelocity * (delta / 1000) * 1.8 * speedMultiplier;
-    
-    if (velocityFactor.get() !== 0) {
-      moveBy += baseVelocity * Math.min(velocityFactor.get(), 2.0) * (delta / 1000) * 2.5 * speedMultiplier;
+    // Cap delta at 32ms to prevent sudden jumps on frame drops or tab switching
+    const clampedDelta = Math.min(delta, 32);
+    let moveBy = baseVelocity * (clampedDelta / 1000) * 1.5 * speedMultiplier;
+
+    // Smooth scroll velocity acceleration
+    const currentVelocity = smoothVelocity.get();
+    if (Math.abs(currentVelocity) > 30) {
+      const scrollBoost = Math.min(Math.abs(currentVelocity) / 400, 2.0);
+      moveBy += moveBy * scrollBoost;
     }
-    
+
     baseX.set(baseX.get() + moveBy);
   });
 
-  // Duplicate items 4 times to ensure uninterrupted infinite carousel looping
-  const duplicatedItems = [...items, ...items, ...items, ...items];
+  // Duplicate items 3 times for seamless 33.333% loop
+  const duplicatedItems = [...items, ...items, ...items];
 
   return (
     <div
@@ -100,7 +103,10 @@ function InfiniteParallaxRow({
       onMouseLeave={() => setIsHovered(false)}
       className="overflow-hidden whitespace-nowrap flex flex-nowrap select-none w-full py-1"
     >
-      <motion.div className="flex gap-5 md:gap-6 shrink-0" style={{ x }}>
+      <motion.div
+        className="flex gap-5 md:gap-6 shrink-0 will-change-transform transform-gpu"
+        style={{ x }}
+      >
         {duplicatedItems.map((cert, idx) => (
           <CertificatePhotoCard key={idx} cert={cert} />
         ))}
@@ -124,13 +130,11 @@ export default function ParallaxShowcase({
     offset: ["start end", "end start"],
   });
 
-  const springConfig = { stiffness: 180, damping: 30 };
-
-  // 3D Isometric Viewport Rotation & Elevation on Scroll
-  const rotateX = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [14, 0, -14]), springConfig);
-  const rotateZ = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [8, 0, -8]), springConfig);
-  const translateY = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [-180, 0, 180]), springConfig);
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.5, 1, 1, 0.5]);
+  // Synchronized directly with Lenis smooth scroll without competing secondary springs
+  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [8, 0, -8]);
+  const rotateZ = useTransform(scrollYProgress, [0, 0.5, 1], [4, 0, -4]);
+  const translateY = useTransform(scrollYProgress, [0, 0.5, 1], [-90, 0, 90]);
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.6, 1, 1, 0.6]);
 
   return (
     <section
@@ -147,7 +151,7 @@ export default function ParallaxShowcase({
         </p>
       </div>
 
-      {/* 3D Isometric Viewport Container with Slow, Calm Infinite Looping Rows */}
+      {/* 3D Isometric Viewport Container with Smooth Infinite Looping Rows */}
       <motion.div
         style={{
           rotateX,
@@ -157,7 +161,7 @@ export default function ParallaxShowcase({
           perspective: "1400px",
           transformStyle: "preserve-3d",
         }}
-        className="w-full flex flex-col gap-6 md:gap-8 relative z-10"
+        className="w-full flex flex-col gap-6 md:gap-8 relative z-10 will-change-transform transform-gpu"
       >
         {/* Row 1: Gentle Gliding to the Left */}
         <InfiniteParallaxRow items={certs.row1} baseVelocity={-0.7} />

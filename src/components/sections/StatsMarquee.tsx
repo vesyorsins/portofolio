@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Zap } from "lucide-react";
 import { StatMetric } from "@/types/portfolio";
 import { defaultSiteSettings } from "@/data/siteSettings";
@@ -21,8 +21,7 @@ export default function StatsMarquee({
     offset: ["start end", "end start"],
   });
 
-  const springConfig = { stiffness: 180, damping: 25 };
-  const cardScale = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [0.97, 1, 0.97]), springConfig);
+  const cardScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.97, 1, 0.97]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.6, 1, 1, 0.6]);
 
   const validStats = (Array.isArray(stats) ? stats : []).filter(
@@ -51,7 +50,7 @@ export default function StatsMarquee({
       {/* Top Section: Metrics Grid */}
       <motion.div
         style={{ scale: cardScale, opacity }}
-        className="max-w-7xl mx-auto px-4 md:px-8 mb-8"
+        className="max-w-7xl mx-auto px-4 md:px-8 mb-8 will-change-transform transform-gpu"
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
           {displayStats.map((stat, i) => (
@@ -61,7 +60,7 @@ export default function StatsMarquee({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="p-5 md:p-6 rounded-2xl bg-white/80 backdrop-blur-md border border-stone-200/80 hover:border-stone-300 transition-colors group shadow-sm"
+              className="p-5 md:p-6 rounded-2xl bg-white/90 border border-stone-200/90 hover:border-stone-300 transition-colors group shadow-sm"
             >
               <div className="text-[11px] font-mono text-stone-500 tracking-wider mb-2 font-medium">
                 {stat.label}
@@ -77,7 +76,7 @@ export default function StatsMarquee({
         </div>
 
         {/* Telemetry row */}
-        <div className="p-3.5 rounded-xl bg-white/70 backdrop-blur-md border border-stone-200/80 flex flex-col md:flex-row items-center justify-between gap-3 text-xs font-mono text-stone-600 shadow-sm">
+        <div className="p-3.5 rounded-xl bg-white/90 border border-stone-200/90 flex flex-col md:flex-row items-center justify-between gap-3 text-xs font-mono text-stone-600 shadow-sm">
           <div className="flex items-center gap-2 text-[#1c1917] font-semibold">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
             <span>CORE STACK OVERVIEW:</span>
@@ -98,12 +97,12 @@ export default function StatsMarquee({
             ease: "linear",
             duration: 32,
           }}
-          className="flex whitespace-nowrap gap-3 py-1"
+          className="flex whitespace-nowrap gap-3 py-1 will-change-transform transform-gpu"
         >
           {[...technologies, ...technologies].map((tech, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-stone-200 text-xs font-mono text-stone-700 hover:text-black hover:border-stone-400 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-stone-200 text-xs font-mono text-stone-700 hover:text-black hover:border-stone-400 transition-colors shadow-sm"
             >
               <Zap className="w-3 h-3 text-stone-500" />
               <span>{tech}</span>

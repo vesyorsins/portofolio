@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import {
   motion,
   useScroll,
@@ -29,36 +29,37 @@ export function VelocityText({ children, baseVelocity = 3, className = "" }: Vel
   const scrollVelocity = useVelocity(scrollY);
   const smoothVelocity = useSpring(scrollVelocity, {
     damping: 50,
-    stiffness: 400,
+    stiffness: 300,
   });
 
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 4], {
-    clamp: false,
-  });
+  // Seamless modulo wrap between -25% and 0% for 4 repeating blocks
+  const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
 
-  const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`);
+  useAnimationFrame((_, delta) => {
+    // Cap delta at 32ms to prevent huge jumps on tab switch or frame drop
+    const clampedDelta = Math.min(delta, 32);
+    let moveBy = baseVelocity * (clampedDelta / 1000) * 1.5;
 
-  const directionFactor = useRef<number>(1);
-  useAnimationFrame((t, delta) => {
-    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
-
-    if (velocityFactor.get() < 0) {
-      directionFactor.current = -1;
-    } else if (velocityFactor.get() > 0) {
-      directionFactor.current = 1;
+    // Smooth scroll acceleration that boosts movement in the row's natural direction
+    const currentVelocity = smoothVelocity.get();
+    if (Math.abs(currentVelocity) > 30) {
+      const scrollBoost = Math.min(Math.abs(currentVelocity) / 350, 2.5);
+      moveBy += moveBy * scrollBoost;
     }
 
-    moveBy += directionFactor.current * moveBy * velocityFactor.get();
     baseX.set(baseX.get() + moveBy);
   });
 
   return (
     <div className="overflow-hidden whitespace-nowrap flex flex-nowrap select-none py-2">
-      <motion.div className={`flex whitespace-nowrap font-bold text-3xl sm:text-5xl md:text-6xl tracking-tight uppercase ${className}`} style={{ x }}>
-        <span className="mr-8">{children}</span>
-        <span className="mr-8">{children}</span>
-        <span className="mr-8">{children}</span>
-        <span className="mr-8">{children}</span>
+      <motion.div
+        className={`flex whitespace-nowrap font-bold text-3xl sm:text-5xl md:text-6xl tracking-tight uppercase will-change-transform transform-gpu ${className}`}
+        style={{ x }}
+      >
+        <span className="mr-8 shrink-0">{children}</span>
+        <span className="mr-8 shrink-0">{children}</span>
+        <span className="mr-8 shrink-0">{children}</span>
+        <span className="mr-8 shrink-0">{children}</span>
       </motion.div>
     </div>
   );

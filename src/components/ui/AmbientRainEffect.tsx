@@ -62,6 +62,13 @@ export default function AmbientRainEffect() {
     const ripples: Ripple[] = [];
 
     const render = () => {
+      // Skip rendering and clear canvas when not in dark realm
+      if (scrollY.get() < 3600) {
+        ctx.clearRect(0, 0, width, height);
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
       // Render & Update Raindrops
@@ -132,7 +139,7 @@ export default function AmbientRainEffect() {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [scrollY]);
 
   return (
     <motion.canvas

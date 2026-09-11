@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface FogParticle {
   x: number;
@@ -17,33 +17,10 @@ interface FogParticle {
 
 export default function AmbientFogEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [fogOpacity, setFogOpacity] = useState<number>(0);
+  const { scrollY } = useScroll();
 
-  // Dynamic Scroll Listener: Accurately triggers fog ONLY when the user reaches #experience (Professional Experience)
-  useEffect(() => {
-    const handleScroll = () => {
-      const el = document.getElementById("experience");
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // When #experience enters viewport
-      if (rect.top > windowHeight * 0.8) {
-        setFogOpacity(0);
-      } else {
-        // Smoothly ramps up opacity as user scrolls through Experience Timeline and downward
-        const progress = Math.min(
-          Math.max((windowHeight * 0.8 - rect.top) / (windowHeight * 0.6), 0),
-          1
-        );
-        setFogOpacity(progress * 0.85);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Smoothly emerges only when reaching the lower experience sections
+  const fogOpacity = useTransform(scrollY, [5000, 6400], [0, 0.85]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -82,6 +59,13 @@ export default function AmbientFogEffect() {
     });
 
     const render = () => {
+      // If user hasn't scrolled near the experience section, sleep and skip canvas rendering
+      if (scrollY.get() < 4600) {
+        ctx.clearRect(0, 0, width, height);
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
       for (let i = 0; i < fogParticles.length; i++) {
@@ -122,13 +106,12 @@ export default function AmbientFogEffect() {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [scrollY]);
 
   return (
     <motion.canvas
       ref={canvasRef}
-      animate={{ opacity: fogOpacity }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      style={{ opacity: fogOpacity }}
       className="fixed inset-0 pointer-events-none z-[1] w-full h-full mix-blend-screen"
     />
   );
