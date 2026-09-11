@@ -1,11 +1,10 @@
 import { SkillCategory } from "@/types/portfolio";
-import { Brain, Code2, ShieldAlert, Server } from "lucide-react";
 
 export const skillCategories: SkillCategory[] = [
   {
     id: "fullstack",
     title: "Full-Stack Web & TypeScript Architecture",
-    icon: Code2,
+    iconName: "Code2",
     tagline: "Scalable Distributed Web Applications & Server Components",
     description: "Membangun sistem web full-stack modern berbasis Next.js App Router, strict TypeScript type safety, dan performa Core Web Vitals 100/100.",
     skills: [
@@ -19,7 +18,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "security",
     title: "Security Engineering & Pentest",
-    icon: ShieldAlert,
+    iconName: "ShieldAlert",
     tagline: "Offensive Security, Vulnerability Hunting, and App Hardening",
     description: "Melakukan audit keamanan aplikasi web, penetration testing berstandar OWASP Top 10, fuzzing payload WAF, dan penguatan arsitektur zero-trust.",
     skills: [
@@ -33,7 +32,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "devops",
     title: "Cloud Native & DevOps Engineering",
-    icon: Server,
+    iconName: "Server",
     tagline: "Containerization, Continuous Delivery, and Observability",
     description: "Mengelola infrastruktur cloud berbasis kontainer Docker, edge deployment, dan pemantauan metrik telemetri sistem secara real-time.",
     skills: [
@@ -47,7 +46,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "ai",
     title: "AI Systems & Machine Learning",
-    icon: Brain,
+    iconName: "Brain",
     tagline: "LLM Orchestration, Streaming RAG, and Vector Retrieval",
     description: "Merancang pipeline inferensi AI berbasis agen, embedding semantik berkecepatan tinggi, dan integrasi multi-model dengan performa optimal.",
     skills: [

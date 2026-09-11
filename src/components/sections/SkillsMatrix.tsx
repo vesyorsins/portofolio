@@ -3,8 +3,17 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { skillCategories } from "@/data/skills";
+import { SkillCategory } from "@/types/portfolio";
+import { Code2, ShieldAlert, Server, Brain, LucideIcon } from "lucide-react";
 
-export default function SkillsMatrix() {
+const iconMap: Record<string, LucideIcon> = {
+  Code2,
+  ShieldAlert,
+  Server,
+  Brain,
+};
+
+export default function SkillsMatrix({ categories = skillCategories }: { categories?: SkillCategory[] }) {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -35,8 +44,8 @@ export default function SkillsMatrix() {
         style={{ y: translateY }}
         className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
       >
-        {skillCategories.map((category, idx) => {
-          const Icon = category.icon;
+        {categories.map((category, idx) => {
+          const Icon = iconMap[category.iconName] || Code2;
           return (
             <motion.div
               key={category.id}
@@ -59,33 +68,38 @@ export default function SkillsMatrix() {
                     <p className="text-xs font-mono text-zinc-400 mt-0.5">
                       {category.tagline}
                     </p>
-                    <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                      {category.description}
-                    </p>
                   </div>
                 </div>
 
-                {/* Skill List */}
-                <div className="space-y-3 mt-6">
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-6">
+                  {category.description}
+                </p>
+
+                {/* Skill Bars */}
+                <div className="space-y-4">
                   {category.skills.map((skill) => (
-                    <div key={skill.name} className="space-y-1.5 p-2 rounded-lg bg-zinc-900/60 border border-zinc-800/80">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-zinc-200">{skill.name}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono text-zinc-500">{skill.category}</span>
-                          <span className="font-mono text-xs text-zinc-300 font-medium">{skill.level}%</span>
-                        </div>
+                    <div key={skill.name} className="space-y-1.5">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-mono text-zinc-200 font-medium">
+                          {skill.name}
+                        </span>
+                        <span className="font-mono text-zinc-500 text-[11px]">
+                          {skill.category}
+                        </span>
                       </div>
-                      <div className="w-full h-1 rounded-full bg-zinc-800 overflow-hidden">
+
+                      {/* Progress Bar Container */}
+                      <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
                         <motion.div
                           initial={{ width: 0 }}
                           whileInView={{ width: `${skill.level}%` }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                          className="h-full bg-zinc-400 rounded-full"
+                          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                          className="h-full bg-white rounded-full"
                         />
                       </div>
-                      <p className="text-[11px] text-zinc-400">
+
+                      <p className="text-[11px] text-zinc-500 leading-tight">
                         {skill.description}
                       </p>
                     </div>

@@ -4,8 +4,9 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { championshipCards } from "@/data/awards";
+import { ChampionshipCard } from "@/types/portfolio";
 
-export default function StickyCardStack() {
+export default function StickyCardStack({ awards = championshipCards }: { awards?: ChampionshipCard[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Track scroll progress across the whole 400vh tall stack container
@@ -75,8 +76,8 @@ export default function StickyCardStack() {
 
         {/* Stack Box where all cards overlap & rise onto each other */}
         <div className="relative w-full h-[420px] sm:h-[390px] md:h-[370px] max-w-4xl">
-          {championshipCards.map((card, index) => {
-            const tf = cardTransforms[index];
+          {awards.map((card, index) => {
+            const tf = cardTransforms[index] || cardTransforms[cardTransforms.length - 1];
             return (
               <motion.div
                 key={card.number}

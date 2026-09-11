@@ -3,8 +3,18 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Zap } from "lucide-react";
+import { StatMetric } from "@/types/portfolio";
+import { defaultSiteSettings } from "@/data/siteSettings";
 
-export default function StatsMarquee() {
+interface StatsMarqueeProps {
+  stats?: StatMetric[];
+  telemetryOverview?: string;
+}
+
+export default function StatsMarquee({
+  stats = defaultSiteSettings.stats,
+  telemetryOverview = defaultSiteSettings.marqueeLine1,
+}: StatsMarqueeProps) {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -15,12 +25,10 @@ export default function StatsMarquee() {
   const cardScale = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [0.97, 1, 0.97]), springConfig);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.6, 1, 1, 0.6]);
 
-  const stats = [
-    { label: "EXPERIENCE", value: "4+ Years", desc: "Production software architecture" },
-    { label: "SHIPPED SYSTEMS", value: "24+ Projects", desc: "Web applications & microservices" },
-    { label: "OPEN SOURCE COMMITS", value: "1,480+", desc: "Verified GitHub contributions" },
-    { label: "PRODUCTION UPTIME", value: "99.98%", desc: "Average system availability" },
-  ];
+  const validStats = (Array.isArray(stats) ? stats : []).filter(
+    (st) => Boolean(st && st.label && st.value)
+  );
+  const displayStats = validStats.length > 0 ? validStats : defaultSiteSettings.stats;
 
   const technologies = [
     "Next.js 16 (App Router)",
@@ -46,9 +54,9 @@ export default function StatsMarquee() {
         className="max-w-7xl mx-auto px-4 md:px-8 mb-8"
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
-          {stats.map((stat, i) => (
+          {displayStats.map((stat, i) => (
             <motion.div
-              key={stat.label}
+              key={stat.label || i}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -62,7 +70,7 @@ export default function StatsMarquee() {
                 {stat.value}
               </div>
               <div className="text-xs text-stone-500">
-                {stat.desc}
+                {stat.subtext}
               </div>
             </motion.div>
           ))}
@@ -75,11 +83,8 @@ export default function StatsMarquee() {
             <span>CORE STACK OVERVIEW:</span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            <span>• Primary: <span className="text-[#1c1917] font-medium">TypeScript & Python</span></span>
-            <span>• Runtime: <span className="text-[#1c1917] font-medium">Node.js & Bun</span></span>
-            <span>• Database: <span className="text-[#1c1917] font-medium">PostgreSQL & Redis</span></span>
-            <span>• Cloud: <span className="text-[#1c1917] font-medium">AWS & Vercel</span></span>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-center">
+            <span>{telemetryOverview}</span>
           </div>
         </div>
       </motion.div>

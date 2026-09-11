@@ -5,12 +5,18 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowUpRight, Copy, Check, Mail, Terminal } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/Icons";
 import HeroProfileCard from "@/components/ui/HeroProfileCard";
+import { SiteSettings } from "@/types/portfolio";
+import { defaultSiteSettings } from "@/data/siteSettings";
 
 interface HeroProps {
+  settings?: SiteSettings;
   onOpenTerminal?: () => void;
 }
 
-export default function Hero({ onOpenTerminal }: HeroProps) {
+export default function Hero({
+  settings = defaultSiteSettings,
+  onOpenTerminal,
+}: HeroProps) {
   const [copied, setCopied] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
@@ -25,12 +31,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const cardScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 0.9]), springConfig);
 
-  const roles = [
-    "Full-Stack Web Engineer",
-    "Security & Penetration Tester",
-    "DevOps & Cloud Architect",
-    "Applied AI & Systems Engineer",
-  ];
+  const roles = settings.specializingRoles?.length > 0 ? settings.specializingRoles : defaultSiteSettings.specializingRoles;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,7 +41,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
   }, [roles.length]);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText("hello@vesyorsins.dev");
+    navigator.clipboard.writeText(settings.directEmail || defaultSiteSettings.directEmail);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -72,7 +73,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
           >
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
             <span className="text-xs font-mono text-emerald-800 font-medium">
-              Available for full-time & selective projects
+              {settings.availabilityStatus || "Available for full-time & selective projects"}
             </span>
           </motion.div>
 
@@ -83,7 +84,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#1c1917] leading-[1.08] mb-4"
           >
-            Engineering scalable web systems with precision & motion.
+            {settings.headline}
           </motion.h1>
 
           {/* Dynamic Role */}
@@ -113,8 +114,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             transition={{ duration: 0.5, delay: 0.35 }}
             className="text-stone-600 text-sm md:text-base leading-relaxed max-w-xl mb-8 font-normal"
           >
-            Building production software at the intersection of robust backend architectures, 
-            interactive 3D WebGL interfaces, and performance-focused frontend engineering.
+            {settings.bio}
           </motion.p>
 
           {/* Buttons */}
@@ -166,7 +166,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             )}
           </motion.div>
 
-          {/* Responsive Social Links Pills (Mobile & Desktop Optimized) */}
+          {/* Responsive Social Links Pills */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -176,7 +176,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             <span className="text-stone-400 font-semibold text-[11px] uppercase mr-1">PROFILES:</span>
             
             <a
-              href="https://github.com"
+              href={settings.githubUrl || "https://github.com"}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-white border border-stone-200/90 hover:border-stone-300 text-stone-800 hover:text-black transition-colors shadow-xs cursor-pointer"
@@ -186,7 +186,7 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             </a>
 
             <a
-              href="https://linkedin.com"
+              href={settings.linkedinUrl || "https://linkedin.com"}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-white border border-stone-200/90 hover:border-stone-300 text-stone-800 hover:text-black transition-colors shadow-xs cursor-pointer"
@@ -196,11 +196,11 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             </a>
 
             <a
-              href="mailto:hello@vesyorsins.dev"
+              href={`mailto:${settings.directEmail || "hello@vesyorsins.dev"}`}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-white border border-stone-200/90 hover:border-stone-300 text-stone-800 hover:text-black transition-colors shadow-xs cursor-pointer"
             >
               <Mail className="w-3.5 h-3.5" />
-              <span>hello@vesyorsins.dev</span>
+              <span>{settings.directEmail || "hello@vesyorsins.dev"}</span>
             </a>
           </motion.div>
 
@@ -217,7 +217,19 @@ export default function Hero({ onOpenTerminal }: HeroProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="w-full relative"
           >
-            <HeroProfileCard />
+            <HeroProfileCard
+              name={settings.name}
+              role={roles[0]}
+              imageSrc={settings.avatarImage}
+              location={settings.location}
+              timezone={settings.timezone}
+              availabilityStatus={settings.availabilityStatus}
+              specBadge={settings.specBadge}
+              jackTitle={settings.jackTitle}
+              jackSubtitle={settings.jackSubtitle}
+              jackQuote={settings.jackQuote}
+              jackPills={settings.jackPills}
+            />
           </motion.div>
         </motion.div>
 

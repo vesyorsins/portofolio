@@ -60,26 +60,6 @@ export default function Navbar({ onOpenTerminal }: NavbarProps) {
               : "bg-white/90 text-[#1c1917] backdrop-blur-xl border border-[#e6e3db] shadow-[0_8px_30px_rgba(28,25,23,0.06)]"
           }`}
         >
-          {/* Logo */}
-          <button
-            onClick={() => scrollTo("#hero")}
-            className="flex items-center gap-2.5 text-left cursor-pointer"
-            data-cursor-interactive
-            data-cursor-text="TOP"
-          >
-            <div
-              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-colors ${
-                isDarkZone ? "bg-zinc-800 text-white border border-zinc-700" : "bg-[#1c1917] text-white"
-              }`}
-            >
-              V
-            </div>
-            <span className="text-sm font-semibold tracking-tight flex items-center gap-1.5">
-              Vesyorsins
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            </span>
-          </button>
-
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {

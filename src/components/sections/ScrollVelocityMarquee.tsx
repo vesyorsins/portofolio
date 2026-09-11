@@ -10,6 +10,7 @@ import {
   useAnimationFrame,
   useMotionValue,
 } from "framer-motion";
+import { defaultSiteSettings } from "@/data/siteSettings";
 
 interface VelocityTextProps {
   children: string;
@@ -63,14 +64,20 @@ export function VelocityText({ children, baseVelocity = 3, className = "" }: Vel
   );
 }
 
-export default function ScrollVelocityMarquee() {
+export default function ScrollVelocityMarquee({
+  line1 = defaultSiteSettings.marqueeLine1,
+  line2 = defaultSiteSettings.marqueeLine2,
+}: {
+  line1?: string;
+  line2?: string;
+}) {
   return (
     <section className="w-full py-16 bg-transparent overflow-hidden border-y border-stone-300/30">
       <VelocityText baseVelocity={-2} className="text-stone-400 hover:text-stone-700 transition-colors">
-        Creative Development • 3D WebGL • Systems Architecture •
+        {line1}
       </VelocityText>
       <VelocityText baseVelocity={2} className="text-stone-300 hover:text-stone-600 transition-colors mt-2">
-        Full-Stack Engineering • Performance First • TypeScript Core •
+        {line2}
       </VelocityText>
     </section>
   );

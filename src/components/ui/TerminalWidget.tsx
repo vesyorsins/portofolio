@@ -56,6 +56,7 @@ export default function TerminalWidget({ isOpen, onClose }: TerminalWidgetProps)
             <p><span className="text-zinc-400 w-24 inline-block font-mono">about</span> — Engineer background & bio</p>
             <p><span className="text-zinc-400 w-24 inline-block font-mono">skills</span> — List core stack proficiencies</p>
             <p><span className="text-zinc-400 w-24 inline-block font-mono">projects</span> — View top selected production systems</p>
+            <p><span className="text-zinc-400 w-24 inline-block font-mono">studio</span> — Open Sanity.io CMS Studio dashboard (/studio)</p>
             <p><span className="text-zinc-400 w-24 inline-block font-mono">contact</span> — Get direct email & profiles</p>
             <p><span className="text-zinc-400 w-24 inline-block font-mono">clear</span> — Clear terminal window</p>
           </div>
@@ -87,9 +88,20 @@ export default function TerminalWidget({ isOpen, onClose }: TerminalWidgetProps)
         res = (
           <div className="space-y-1.5 text-zinc-300">
             <p className="text-white font-semibold">TOP SELECTED SYSTEMS:</p>
-            <p>1. <span className="text-white font-bold">NeuroNexus AI Router</span> — Multi-agent LLM orchestration & streaming RAG</p>
-            <p>2. <span className="text-white font-bold">Aetheria 3D WebGL</span> — 3D Rapier physics & custom shaders</p>
-            <p>3. <span className="text-white font-bold">TerraFlow Data Mesh</span> — 50k req/sec distributed telemetry engine</p>
+            <p>1. <span className="text-white font-bold">SentinelCore</span> — Sub-10ms real-time telemetry streaming</p>
+            <p>2. <span className="text-white font-bold">Aegis RAG</span> — Enterprise vector retrieval engine (1.2M vectors)</p>
+            <p>3. <span className="text-white font-bold">AeroMesh</span> — Multi-region Kubernetes orchestrator (99.999% SLA)</p>
+          </div>
+        );
+        break;
+
+      case "studio":
+      case "cms":
+        res = (
+          <div className="space-y-1 text-zinc-300">
+            <p className="text-white font-semibold">SANITY CMS STUDIO:</p>
+            <p>Direct CMS dashboard is accessible at: <a href="/studio" target="_blank" className="text-cyan-400 underline font-mono">/studio</a></p>
+            <p className="text-xs text-zinc-400">Manage projects, awards, certificates, and skills directly in real-time.</p>
           </div>
         );
         break;

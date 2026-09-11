@@ -5,7 +5,9 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Copy, Check, Mail, ArrowUpRight, Send, CheckCircle2 } from "lucide-react";
 import { socials } from "@/data/navigation";
 
-export default function ContactSection() {
+import { defaultSiteSettings } from "@/data/siteSettings";
+
+export default function ContactSection({ email = defaultSiteSettings.directEmail }: { email?: string }) {
   const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sentSuccess, setSentSuccess] = useState(false);
@@ -21,7 +23,7 @@ export default function ContactSection() {
   const scale = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]), springConfig);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.5, 1, 1, 0.5]);
 
-  const directEmail = "hello@vesyorsins.dev";
+  const directEmail = email;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(directEmail);
@@ -183,7 +185,7 @@ export default function ContactSection() {
               >
                 <div className="flex items-center gap-2.5">
                   <div className="p-1.5 rounded-xl bg-zinc-800 text-zinc-400 group-hover:text-white transition-colors border border-zinc-700">
-                    <Icon className="w-3.5 h-3.5" />
+                    {Icon && <Icon className="w-3.5 h-3.5" />}
                   </div>
                   <div className="text-left">
                     <div className="text-xs font-bold text-white">

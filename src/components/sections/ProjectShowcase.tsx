@@ -242,7 +242,7 @@ function ProjectCardItem({
   );
 }
 
-export default function ProjectShowcase() {
+export default function ProjectShowcase({ projects = projectsData }: { projects?: ProjectItem[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
@@ -256,12 +256,12 @@ export default function ProjectShowcase() {
 
   // Count projects per category
   const getCount = (cat: string) => {
-    if (cat === "All") return projectsData.length;
-    return projectsData.filter((p) => p.category === cat).length;
+    if (cat === "All") return projects.length;
+    return projects.filter((p) => p.category === cat).length;
   };
 
   // Filter projects by category
-  const filteredProjects = projectsData.filter((item) => {
+  const filteredProjects = projects.filter((item) => {
     if (selectedCategory === "All") return true;
     return item.category === selectedCategory;
   });

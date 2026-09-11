@@ -109,14 +109,22 @@ function InfiniteParallaxRow({
   );
 }
 
-export default function ParallaxShowcase() {
+export default function ParallaxShowcase({
+  certs = { row1: row1Certificates, row2: row2Certificates, row3: row3Certificates },
+}: {
+  certs?: {
+    row1: CertificatePhoto[];
+    row2: CertificatePhoto[];
+    row3: CertificatePhoto[];
+  };
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
-  const springConfig = { stiffness: 180, damping: 25 };
+  const springConfig = { stiffness: 180, damping: 30 };
 
   // 3D Isometric Viewport Rotation & Elevation on Scroll
   const rotateX = useSpring(useTransform(scrollYProgress, [0, 0.5, 1], [14, 0, -14]), springConfig);
@@ -152,13 +160,13 @@ export default function ParallaxShowcase() {
         className="w-full flex flex-col gap-6 md:gap-8 relative z-10"
       >
         {/* Row 1: Gentle Gliding to the Left */}
-        <InfiniteParallaxRow items={row1Certificates} baseVelocity={-0.7} />
+        <InfiniteParallaxRow items={certs.row1} baseVelocity={-0.7} />
 
         {/* Row 2: Gentle Gliding to the Right */}
-        <InfiniteParallaxRow items={row2Certificates} baseVelocity={0.7} />
+        <InfiniteParallaxRow items={certs.row2} baseVelocity={0.7} />
 
         {/* Row 3: Gentle Gliding to the Left */}
-        <InfiniteParallaxRow items={row3Certificates} baseVelocity={-0.6} />
+        <InfiniteParallaxRow items={certs.row3} baseVelocity={-0.6} />
       </motion.div>
     </section>
   );

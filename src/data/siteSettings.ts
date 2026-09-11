@@ -1,0 +1,37 @@
+import { SiteSettings } from "@/types/portfolio";
+
+export const defaultSiteSettings: SiteSettings = {
+  name: "Vesyorsins",
+  headline: "Engineering scalable web systems with precision & motion.",
+  specializingRoles: [
+    "Full-Stack Software Engineer",
+    "Security & Penetration Tester",
+    "DevOps & Cloud Architect",
+    "AI Systems & Machine Learning",
+  ],
+  bio: "Building production software at the intersection of robust backend architectures, interactive 3D WebGL interfaces, and performance-focused frontend engineering.",
+  directEmail: "hello@vesyorsins.dev",
+  avatarImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+  location: "JAKARTA, ID",
+  timezone: "UTC+7",
+  availabilityStatus: "AVAILABLE FOR WORK",
+  specBadge: "FULL-STACK & SEC / TS CORE",
+  githubUrl: "https://github.com",
+  linkedinUrl: "https://linkedin.com",
+  twitterUrl: "https://twitter.com",
+  discordHandle: "vesyorsins#0001",
+  jackTitle: "JACK OF ALL TRADES",
+  jackSubtitle: "MASTER OF SYSTEMS",
+  jackQuote: "A jack of all trades is a master of none, but oftentimes better than a master of one.",
+  jackPills: ["Full-Stack Web", "AI & Security", "DevOps Cloud"],
+  stats: [
+    { label: "EXPERIENCE", value: "4+ Years", subtext: "Production software architecture" },
+    { label: "SHIPPED SYSTEMS", value: "24+ Projects", subtext: "Web applications & microservices" },
+    { label: "OPEN SOURCE COMMITS", value: "1,480+", subtext: "Verified GitHub contributions" },
+    { label: "PRODUCTION UPTIME", value: "99.98%", subtext: "Average system availability" },
+  ],
+  marqueeLine1: "PRIMARY: TYPESCRIPT & PYTHON • RUNTIME: NODE.JS & BUN • DATABASE: POSTGRESQL & REDIS • CLOUD: AWS & VERCEL",
+  marqueeLine2: "NEXT.JS 16 • REACT 19 • TAILWIND CSS • WEBSOCKETS • PYTORCH • DOCKER • LINUX",
+  manifestoTag: "[ MANIFESTO // ENGINEERING ETHOS ]",
+  manifestoText: "I believe exceptional software is forged at the intersection of mathematical rigor, performance optimization, and organic human motion. Every interface should feel weightless, responsive, and crafted with uncompromising attention to detail.",
+};

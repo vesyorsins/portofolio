@@ -24,12 +24,28 @@ interface HeroProfileCardProps {
   imageSrc?: string;
   name?: string;
   role?: string;
+  location?: string;
+  timezone?: string;
+  availabilityStatus?: string;
+  specBadge?: string;
+  jackTitle?: string;
+  jackSubtitle?: string;
+  jackQuote?: string;
+  jackPills?: string[];
 }
 
 export default function HeroProfileCard({
   imageSrc = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
   name = "Vesyorsins",
   role = "Lead Software & Creative Engineer",
+  location = "JAKARTA, ID",
+  timezone = "UTC+7",
+  availabilityStatus = "AVAILABLE FOR WORK",
+  specBadge = "FULL-STACK & SEC / TS CORE",
+  jackTitle = "JACK OF ALL TRADES",
+  jackSubtitle = "MASTER OF SYSTEMS",
+  jackQuote = "A jack of all trades is a master of none, but oftentimes better than a master of one.",
+  jackPills = ["Full-Stack Web", "AI & Security", "DevOps Cloud"],
 }: HeroProfileCardProps) {
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -97,8 +113,8 @@ export default function HeroProfileCard({
   };
 
   // Directional swipe logic:
-  // - Swiping LEFT (drag < -20px or velocity < -120) rotates counter-clockwise by -180 deg
-  // - Swiping RIGHT (drag > 20px or velocity > 120) rotates clockwise by +180 deg
+  // - Swiping LEFT rotates counter-clockwise by -180 deg
+  // - Swiping RIGHT rotates clockwise by +180 deg
   const handlePanEnd = (_: PointerEvent, info: PanInfo) => {
     dragOffsetAngle.set(0);
     const threshold = 20;
@@ -135,8 +151,8 @@ export default function HeroProfileCard({
       >
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#e6e3db] shadow-[0_8px_25px_rgba(28,25,23,0.08)] text-xs font-mono text-[#1c1917]">
           <MapPin className="w-3.5 h-3.5 text-stone-600" />
-          <span className="font-semibold">JAKARTA, ID</span>
-          <span className="text-stone-400">• UTC+7</span>
+          <span className="font-semibold">{location}</span>
+          <span className="text-stone-400">• {timezone}</span>
         </div>
       </motion.div>
 
@@ -151,7 +167,7 @@ export default function HeroProfileCard({
       >
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1c1917] text-white shadow-[0_8px_25px_rgba(28,25,23,0.18)] text-xs font-mono">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="font-medium">AVAILABLE FOR WORK</span>
+          <span className="font-medium">{availabilityStatus}</span>
         </div>
       </motion.div>
 
@@ -166,8 +182,7 @@ export default function HeroProfileCard({
       >
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/95 backdrop-blur-md border border-[#e6e3db] shadow-[0_8px_25px_rgba(28,25,23,0.08)] text-xs font-mono text-stone-800">
           <Activity className="w-3.5 h-3.5 text-emerald-600" />
-          <span className="font-semibold">FULL-STACK & SEC</span>
-          <span className="text-stone-400">/ TS CORE</span>
+          <span className="font-semibold">{specBadge}</span>
         </div>
       </motion.div>
 
@@ -260,7 +275,7 @@ export default function HeroProfileCard({
               </div>
 
               <div className="px-2.5 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-[10px] font-mono text-amber-300 font-bold uppercase tracking-wider">
-                MASTER OF SYSTEMS
+                {jackSubtitle}
               </div>
 
               <div className="flex flex-col items-center leading-none text-right opacity-0 pointer-events-none">
@@ -277,29 +292,29 @@ export default function HeroProfileCard({
               </div>
 
               <h3 className="text-xl md:text-2xl font-serif font-extrabold tracking-wider text-amber-300 uppercase mb-1">
-                JACK OF ALL TRADES
+                {jackTitle}
               </h3>
               
               <div className="h-[1px] w-24 mx-auto bg-gradient-to-r from-transparent via-amber-400/60 to-transparent my-2" />
 
               <p className="text-[11px] font-mono text-stone-300 italic max-w-xs mx-auto leading-tight mb-3">
-                &ldquo;A jack of all trades is a master of none, but oftentimes better than a master of one.&rdquo;
+                &ldquo;{jackQuote}&rdquo;
               </p>
 
               {/* Domain Mastery Pills */}
               <div className="flex flex-wrap justify-center gap-1.5 mt-2">
-                <span className="px-2 py-0.5 rounded bg-stone-800 border border-amber-400/30 text-[10px] font-mono text-amber-200 flex items-center gap-1">
-                  <Code2 className="w-3 h-3 text-amber-400" />
-                  <span>Full-Stack Web</span>
-                </span>
-                <span className="px-2 py-0.5 rounded bg-stone-800 border border-amber-400/30 text-[10px] font-mono text-amber-200 flex items-center gap-1">
-                  <Cpu className="w-3 h-3 text-amber-400" />
-                  <span>AI & Security</span>
-                </span>
-                <span className="px-2 py-0.5 rounded bg-stone-800 border border-amber-400/30 text-[10px] font-mono text-amber-200 flex items-center gap-1">
-                  <Layers className="w-3 h-3 text-amber-400" />
-                  <span>DevOps Cloud</span>
-                </span>
+                {jackPills.map((pill, pIdx) => {
+                  const Icon = pIdx === 0 ? Code2 : pIdx === 1 ? Cpu : Layers;
+                  return (
+                    <span
+                      key={pill}
+                      className="px-2 py-0.5 rounded bg-stone-800 border border-amber-400/30 text-[10px] font-mono text-amber-200 flex items-center gap-1"
+                    >
+                      <Icon className="w-3 h-3 text-amber-400" />
+                      <span>{pill}</span>
+                    </span>
+                  );
+                })}
               </div>
             </div>
 

@@ -4,8 +4,9 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Calendar, MapPin, CheckCircle2 } from "lucide-react";
 import { experiences } from "@/data/experience";
+import { ExperienceItem } from "@/types/portfolio";
 
-export default function ExperienceTimeline() {
+export default function ExperienceTimeline({ milestones = experiences }: { milestones?: ExperienceItem[] }) {
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Track scroll specifically along the timeline track to guarantee 100% completion at the end
@@ -45,7 +46,7 @@ export default function ExperienceTimeline() {
           className="absolute -left-[1px] top-0 bottom-0 w-[2px] bg-white origin-top shadow-none"
         />
 
-        {experiences.map((exp, idx) => (
+        {milestones.map((exp, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, x: -20 }}
